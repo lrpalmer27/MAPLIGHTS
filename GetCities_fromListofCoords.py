@@ -7,7 +7,7 @@ from meteostat import Stations, Hourly
 import os
 
 #preamble
-debugging=0
+debugging=1
 Hourly.cache_dir=r'.'
 WS=pd.DataFrame()
 stations = Stations()
@@ -29,6 +29,9 @@ LATS=[]
 LONGS=[]
 CTEMP=[]
 SNOW=[]
+COUNTRY=[]
+REGION=[]
+NAME=[]
 
 AcceptableCutoffDate=datetime.now().date()-timedelta(days=10)
 
@@ -61,6 +64,9 @@ for i in range(0,Nrows):
         print(data)
 
     ICAO.append(station.icao[0])
+    COUNTRY.append(station.country[0])
+    REGION.append(station.region[0])
+    NAME.append(station.name[0])
     LATS.append(station.latitude[0])
     LONGS.append(station.longitude[0])
     CTEMP.append(data['temp'].iloc[0])
@@ -69,11 +75,15 @@ for i in range(0,Nrows):
     if debugging:
         print('current lists')
         print(ICAO,LATS,LONGS,CTEMP,SNOW)
-           
     
-    
-add2DF={'ICAO':ICAO,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW}
+add2DF={'ICAO':ICAO,'Name':NAME,'Country':COUNTRY,'Region':REGION,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW}
 keepers=pd.DataFrame(add2DF)
+
+plt.scatter(keepers['Longitude'],keepers['Latitude'],marker='x',color='r')
+plt.ylabel('LATITUDE')
+plt.xlabel('LONGITUDE')
+plt.title('North America ONLY')
+plt.show()
 
 keepers.to_csv(r'./Keepers_Export.csv')
 
