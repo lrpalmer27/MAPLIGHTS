@@ -39,7 +39,7 @@ for i in range(0,Nrows):
         
     ## ---------------------- GET WEATHER STATION CLOSEST TO THESE POINTS (FROM CSV) -----------------
     loop=1
-    stations = stations.nearby(df.loc[i,'LAT'],-df.loc[i,'LONG'])
+    stations = stations.nearby(df.loc[i,'LAT'],df.loc[i,'LONG'])
     stations = stations.inventory('hourly',datetime(2024,10,12,0))
     station = stations.fetch(loop)
     
@@ -79,12 +79,12 @@ for i in range(0,Nrows):
 add2DF={'ICAO':ICAO,'Name':NAME,'Country':COUNTRY,'Region':REGION,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW}
 keepers=pd.DataFrame(add2DF)
 
+keepers.to_csv(r'./Keepers_Export.csv')
+
 plt.scatter(keepers['Longitude'],keepers['Latitude'],marker='x',color='r')
 plt.ylabel('LATITUDE')
 plt.xlabel('LONGITUDE')
 plt.title('North America ONLY')
 plt.show()
-
-keepers.to_csv(r'./Keepers_Export.csv')
 
 print('end')
