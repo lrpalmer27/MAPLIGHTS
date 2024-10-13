@@ -85,9 +85,12 @@ colors=clrmapped(norm(CTEMP))
 add2DF={'ICAO':ICAO,'Name':NAME,'Country':COUNTRY,'Region':REGION,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW,'RGBA':colors.tolist()}
 
 keepers=pd.DataFrame(add2DF)
-keepers.to_csv(r'./Keepers_Export.csv')
 
-plt.scatter(keepers['Longitude'],keepers['Latitude'],marker='x',color='r')
+if debugging:
+    keepers.to_csv(r'./Keepers_Export.csv')
+    #saves data to look at in csv format    
+
+plt.scatter(keepers['Longitude'],keepers['Latitude'],c=keepers.RGBA)
 plt.ylabel('LATITUDE')
 plt.xlabel('LONGITUDE')
 plt.title('North America Data Points - point density checker')
