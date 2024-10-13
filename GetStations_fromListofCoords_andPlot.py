@@ -5,20 +5,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from meteostat import Stations, Hourly
 import os
+import matplotlib as mpl
 
 #preamble
-debugging=1
+debugging=0
 Hourly.cache_dir=r'.'
 WS=pd.DataFrame()
 stations = Stations()
 
 ## ---------------------- GET LATLONG FROM CSV FILE --------------------------------
 df = pd.read_csv(os.path.join(os.getcwd(),'NA_Cities.csv'))
-df.head()
 
 Nrows=df.shape[0]
 
 if debugging:
+    print(df.head())
     print(df.LONG)
     print(df.loc[1,'LONG'])
     
@@ -75,16 +76,21 @@ for i in range(0,Nrows):
     if debugging:
         print('current lists')
         print(ICAO,LATS,LONGS,CTEMP,SNOW)
-    
-add2DF={'ICAO':ICAO,'Name':NAME,'Country':COUNTRY,'Region':REGION,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW}
-keepers=pd.DataFrame(add2DF)
 
+## -------------------------------------- COLORMAPPING HERE -------------------------------------------------
+clrmapped=mpl.colormaps['jet']
+norm=mpl.colors.Normalize(min(CTEMP),max(CTEMP))
+colors=clrmapped(norm(CTEMP))
+    
+add2DF={'ICAO':ICAO,'Name':NAME,'Country':COUNTRY,'Region':REGION,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW,'RGBA':colors.tolist()}
+
+keepers=pd.DataFrame(add2DF)
 keepers.to_csv(r'./Keepers_Export.csv')
 
 plt.scatter(keepers['Longitude'],keepers['Latitude'],marker='x',color='r')
 plt.ylabel('LATITUDE')
 plt.xlabel('LONGITUDE')
-plt.title('North America ONLY')
+plt.title('North America Data Points - point density checker')
 plt.show()
 
 print('end')
