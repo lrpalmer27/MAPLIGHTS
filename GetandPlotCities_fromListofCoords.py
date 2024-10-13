@@ -1,12 +1,13 @@
 # Import Meteostat library and dependencies
 from datetime import datetime, timedelta, date
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from meteostat import Stations, Hourly
 import os
 
 #preamble
-debugging=1
+debugging=0
 Hourly.cache_dir=r'.'
 WS=pd.DataFrame()
 stations = Stations()
@@ -19,29 +20,37 @@ Nrows=df.shape[0]
 
 if debugging:
     print(df.LONG)
-
     print(df.loc[1,'LONG'])
     
 ## --------------------- OPEN LOOP TO GRAB RELEVANT DATA FROM EACH OF THESE LOCATIONS ------------------------------
 # init empty lists to append data to
 ICAO=[]
-COORDS=[]
+LATS=[]
+LONGS=[]
 CTEMP=[]
 SNOW=[]
+
+AcceptableCutoffDate=datetime.now().date()-timedelta(days=10)
+
 for i in range(0,Nrows):
         
     ## ---------------------- GET WEATHER STATION CLOSEST TO THESE POINTS (FROM CSV) -----------------
+    loop=1
     stations = stations.nearby(df.loc[i,'LAT'],-df.loc[i,'LONG'])
-    station = stations.fetch(1)
+    stations = stations.inventory('hourly',datetime(2024,10,12,0))
+    station = stations.fetch(loop)
+    
+    while station.empty: 
+        loop+=1
+        station=stations.fetch(loop)
     
     if debugging:
         print(station)
+        varr=station['hourly_end'].iloc[0].date()
         
-    loop=2
-    while station['hourly_end'].iloc[-1].date() < (datetime.now().date()-timedelta(days=60)):
-            # print(station['hourly_end'].iloc[-1].date())
+    while station['hourly_end'].iloc[-1].date() < (AcceptableCutoffDate):
             station=stations.fetch(loop)
-            # print(station['hourly_end'].iloc[-1].date())
+            varr=station['hourly_end'].iloc[-1].date()
             loop+=1 
 
     ## ---------------------- GET WEATHER STATION DATA IN DICT & ADD TO DF -----------------
@@ -52,15 +61,20 @@ for i in range(0,Nrows):
         print(data)
 
     ICAO.append(station.icao[0])
-    COORDS.append([station.latitude[0],station.longitude[0]])
+    LATS.append(station.latitude[0])
+    LONGS.append(station.longitude[0])
     CTEMP.append(data['temp'].iloc[0])
     SNOW.append(data['snow'].iloc[0])
     
     if debugging:
         print('current lists')
-        print(ICAO,COORDS,CTEMP,SNOW)
+        print(ICAO,LATS,LONGS,CTEMP,SNOW)
+           
     
+    
+add2DF={'ICAO':ICAO,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW}
+keepers=pd.DataFrame(add2DF)
 
+keepers.to_csv(r'./Keepers_Export.csv')
 
-# add2DF={'ICAO':station.icao[0],'Coords':[station.latitude[0],station.longitude[0]],'Ctemp':data['temp'].iloc[0],'Snow':data['snow'].iloc[0]}
 print('end')
