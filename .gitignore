@@ -163,3 +163,6 @@ cython_debug/
 
 hourly
 Archive
+CosmeticWallMaps/Provinces
+CosmeticWallMap/States
+CosmeticWallMap
