@@ -26,7 +26,7 @@ A base map has also been created and printed, using QGIS (https://www.qgis.org/)
 
 <img src='Assets/BlackWhiteBasemap.png' width=400>
 
-Added the ability to check if each station is in local daylight. Plotting on Matplotlib as semi-transparent. I did not add a debugging feature to set the time I want to check, so at the time of running, I am only pulling 3 northern stations that are not in 'daylight' locally. Will re-generate example plot below when there are more point not at daylight, either using a debugging feature or generating at a mid-sunset time.
+Added the ability to check if each station is in local daylight. Plotting on Matplotlib as semi-transparent.
 
 <img src='Assets/NA_ColourMapped_stations_wDaylight.png' width =400>
 

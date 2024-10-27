@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from meteostat import Stations, Hourly
 import os
 import matplotlib as mpl
-from suntime import Sun
+from suntime import Sun, SunTimeException
 
 #preamble
 debugging=1
@@ -45,7 +45,7 @@ for i in range(0,Nrows):
     ## ---------------------- GET WEATHER STATION CLOSEST TO THESE POINTS (FROM CSV) -----------------
     loop=1
     stations = stations.nearby(df.loc[i,'LAT'],df.loc[i,'LONG'])
-    stations = stations.inventory('hourly',datetime(ctime_local.year,ctime_local.month,ctime_local.day,0)) #inventory by what stations had reported hourly data as of hour 0 today.
+    stations = stations.inventory('hourly',datetime(ctime_local.year,ctime_local.month,ctime_local.day-1,0)) #inventory by what stations had reported hourly data as of hour 0 today.
     station = stations.fetch(loop)
     
     while station.empty: 
@@ -79,10 +79,22 @@ for i in range(0,Nrows):
     
     ## -------------------- GET DAYLIGHT OR NOT AT EACH STATION -----------------------------
     sun=Sun(station.latitude[0],station.longitude[0])
-    SR=sun.get_local_sunrise_time(time_zone=timezone.utc)
-    SS=sun.get_local_sunset_time(time_zone=timezone.utc)
     
-    if SR<=cUTCtime>=SS:
+    # try/except blocks for local sunrise/sunset times so we avoid the raised exceptions for (northern in this DS) places
+    # which do not have sunrise/sunset every day all year 'round.
+    try: 
+        SR=sun.get_local_sunrise_time(time_zone=timezone.utc)
+    except:
+        NOSUN=1
+        SR=datetime(2024,1,1,1,1,1,tzinfo=timezone.utc)
+    
+    try:
+        SS=sun.get_local_sunset_time(time_zone=timezone.utc)
+    except:
+        NOSUN=1
+        SS=datetime(2024,1,1,0,0,0,tzinfo=timezone.utc)
+    
+    if SR<=cUTCtime>=SS or NOSUN:
         dayli=1
     else:
         dayli=0
