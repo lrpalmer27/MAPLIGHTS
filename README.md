@@ -30,7 +30,17 @@ Added the ability to check if each station is in local daylight. Plotting on Mat
 
 <img src='Assets/NA_ColourMapped_stations_wDaylight.png' width =400>
 
-## Future Works
-The goal is to build this puppy. Currently narrowing down the LED dimming, changing with temperature etc. functionality as of the time of writing this README. More updates to come.
+Plotting actual weather station coordinates on top of map that was actually printed using QGIS, we can thin out the datapoints such that the actual build looks cleaner and less crowded. This is the current state: 
 
+<img src='Assets/DATAPOINT_DENSITY.png' width=400>
+
+## Future Works
+The goal is to build this puppy. LEDs are purchased.
+
+TODOs
+    - Drill holes in map at roughly correct locations
+    - Fix LEDs in place (hot glue (?))
+    - Solder LEDs together in a known order
+    - Develop method to translate current main dataframe (Keepers_Export.csv // Keepers_Export.pkl) into LED product readable information
+    
 
