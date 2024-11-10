@@ -1,3 +1,15 @@
+"""### WHAT DOES THIS FILE DO? ####
+    1. Pulls ~approximate~ city coordinates from "NA_Cities.csv"
+    2. Identifies a current weather station in each of these cities & pulls relevant data from these stations (only current temp used right now)
+    3. Determines if that city currently has daylight or not
+    4. Colourmaps all weather stations current temp relative to one another, and sets daylight as 1/0 (T/F) for each weather station. 
+        If 'debugging=1' this will export a CSV and .pkl file to explore the data.
+    5. 
+
+
+
+"""
+
 # Import Meteostat library and dependencies
 from datetime import datetime, timedelta, date, timezone
 import pandas as pd
@@ -85,16 +97,14 @@ for i in range(0,Nrows):
     try: 
         SR=sun.get_local_sunrise_time(time_zone=timezone.utc)
     except:
-        NOSUN=1
         SR=datetime(2024,1,1,1,1,1,tzinfo=timezone.utc)
     
     try:
         SS=sun.get_local_sunset_time(time_zone=timezone.utc)
     except:
-        NOSUN=1
         SS=datetime(2024,1,1,0,0,0,tzinfo=timezone.utc)
     
-    if SR<=cUTCtime>=SS or NOSUN:
+    if SR<=cUTCtime>=SS:
         dayli=1
     else:
         dayli=0
@@ -121,10 +131,11 @@ if debugging:
     keepers.to_pickle(r'./Keepers_Export.pkl')
     #saves data to look at in csv format    
 
+## -------------------------------------- VISUALIZE DATA LOCALLY ---------------------------------------------------
 plt.scatter(keepers['Longitude'],keepers['Latitude'],c=keepers.RGBA)
 plt.ylabel('LATITUDE')
 plt.xlabel('LONGITUDE')
 plt.title('North America Data Points - point density checker')
 plt.show()
 
-print('end')
+# TODO: PUSH THIS DF TO A METHOD THAT INTERFACES WITH THE ADDRESSABLE LEDs ON THE PHYSICAL MAP
