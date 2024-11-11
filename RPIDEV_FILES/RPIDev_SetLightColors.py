@@ -1,5 +1,6 @@
 import time
 from rpi_ws281x import *
+import Adafruit_NeoPixel 
 import argparse
 
 # LED strip configuration:

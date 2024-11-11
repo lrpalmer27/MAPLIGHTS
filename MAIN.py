@@ -48,7 +48,8 @@ SNOW=[]
 COUNTRY=[]
 REGION=[]
 NAME=[]
-DAYLIGHT=[]
+SUNRISE=[]
+SUNSET=[]
 
 AcceptableCutoffDate=datetime.now().date()-timedelta(days=10)
 
@@ -104,12 +105,14 @@ for i in range(0,Nrows):
     except:
         SS=datetime(2024,1,1,0,0,0,tzinfo=timezone.utc)
     
-    if SR<=cUTCtime>=SS:
-        dayli=1
-    else:
-        dayli=0
+    # # This functionality moved to rpi local.
+    # if SR<=cUTCtime>=SS:
+    #     dayli=1
+    # else:
+    #     dayli=0
     
-    DAYLIGHT.append(dayli)
+    SUNRISE.append(SR)
+    SUNSET.append(SS)
     
     if debugging:
         print('current lists')
@@ -122,7 +125,7 @@ colors=clrmapped(norm(CTEMP))
 
 ## -------------------------------------- ADD DATA TO DF ---------------------------------------------------
     
-add2DF={'ICAO':ICAO,'Name':NAME,'Country':COUNTRY,'Region':REGION,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW,'RGBA':colors.tolist(),'Daylight':DAYLIGHT}
+add2DF={'ICAO':ICAO,'Name':NAME,'Country':COUNTRY,'Region':REGION,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW,'RGBA':colors.tolist(),'Sunrise':SUNRISE,'Sunset':SUNSET}
 
 keepers=pd.DataFrame(add2DF)
 
