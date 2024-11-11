@@ -5,9 +5,6 @@
     4. Colourmaps all weather stations current temp relative to one another, and sets daylight as 1/0 (T/F) for each weather station. 
         If 'debugging=1' this will export a CSV and .pkl file to explore the data.
     5. 
-
-
-
 """
 
 # Import Meteostat library and dependencies
@@ -40,6 +37,7 @@ if debugging:
     
 ## --------------------- OPEN LOOP TO GRAB RELEVANT DATA FROM EACH OF THESE LOCATIONS ------------------------------
 # init empty lists to append data to
+OIndex=df.ORDEREDINDEX.tolist()
 ICAO=[]
 LATS=[]
 LONGS=[]
@@ -98,11 +96,13 @@ for i in range(0,Nrows):
     try: 
         SR=sun.get_local_sunrise_time(time_zone=timezone.utc)
     except:
+        # deals with sunrise exception. Set SR to be hour 1 on Jan01 2024. This way current time can never be SR<=ctime<=SS.
         SR=datetime(2024,1,1,1,1,1,tzinfo=timezone.utc)
     
     try:
         SS=sun.get_local_sunset_time(time_zone=timezone.utc)
     except:
+        # deals with sunrise exception. Set SS to be hour 0 on Jan01 2024. This way current time can never be SR<=ctime<=SS.
         SS=datetime(2024,1,1,0,0,0,tzinfo=timezone.utc)
     
     # # This functionality moved to rpi local.
@@ -125,20 +125,22 @@ colors=clrmapped(norm(CTEMP))
 
 ## -------------------------------------- ADD DATA TO DF ---------------------------------------------------
     
-add2DF={'ICAO':ICAO,'Name':NAME,'Country':COUNTRY,'Region':REGION,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW,'RGBA':colors.tolist(),'Sunrise':SUNRISE,'Sunset':SUNSET}
+add2DF={'ORDEREDINDEX':OIndex,'ICAO':ICAO,'Name':NAME,'Country':COUNTRY,'Region':REGION,'Latitude':LATS,'Longitude':LONGS,'Ctemp':CTEMP,'Snow':SNOW,'RGBA':colors.tolist(),'Sunrise':SUNRISE,'Sunset':SUNSET}
 
 keepers=pd.DataFrame(add2DF)
 
 if debugging:
-    keepers.to_csv(r'./Keepers_Export.csv')
-    keepers.to_pickle(r'./Keepers_Export.pkl')
-    #saves data to look at in csv format    
+    keepers.to_csv(r'./cDATA.csv')
+    #saves data to look at in csv format so its easily read.
+    
+keepers.to_pickle(r'./cDATA.pkl') #always export the pkl file.
 
-## -------------------------------------- VISUALIZE DATA LOCALLY ---------------------------------------------------
-plt.scatter(keepers['Longitude'],keepers['Latitude'],c=keepers.RGBA)
-plt.ylabel('LATITUDE')
-plt.xlabel('LONGITUDE')
-plt.title('North America Data Points - point density checker')
-plt.show()
+if debugging:
+    ## -------------------------------------- VISUALIZE DATA LOCALLY ---------------------------------------------------
+    plt.scatter(keepers['Longitude'],keepers['Latitude'],c=keepers.RGBA)
+    plt.ylabel('LATITUDE')
+    plt.xlabel('LONGITUDE')
+    plt.title('North America Data Points - point density checker')
+    plt.show()
 
 # TODO: PUSH THIS DF TO A METHOD THAT INTERFACES WITH THE ADDRESSABLE LEDs ON THE PHYSICAL MAP
