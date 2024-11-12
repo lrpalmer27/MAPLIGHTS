@@ -13,10 +13,8 @@ def GENERATEDATA(debugging=0):
     from datetime import datetime, timedelta, date, timezone
     import pandas as pd
     import numpy as np
-    import matplotlib.pyplot as plt
     from meteostat import Stations, Hourly
     import os
-    import matplotlib as mpl
     from suntime import Sun, SunTimeException
 
     #preamble
@@ -137,7 +135,9 @@ def GENERATEDATA(debugging=0):
         
     keepers.to_pickle(r'./cDATA.pkl') #always export the pkl file.
 
-    if debugging:
+    if debugging: #this if statement gets deleted from rpi version
+        import matplotlib.pyplot as plt
+        import matplotlib as mpl
         ## -------------------------------------- VISUALIZE DATA LOCALLY ---------------------------------------------------
         plt.scatter(keepers['Longitude'],keepers['Latitude'],c=keepers.RGBA)
         plt.ylabel('LATITUDE')

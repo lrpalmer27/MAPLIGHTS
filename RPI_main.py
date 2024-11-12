@@ -16,7 +16,7 @@ from datetime import datetime, timedelta, date, timezone
 from rpi_ws281x import *
 import argparse
 import pandas as pd
-import DataGenerator
+from DATAGENERATOR import GENERATEDATA
 from suntime import Sun, SunTimeException
 
 # LED strip configuration:
@@ -73,7 +73,7 @@ if __name__ == '__main__':
         
     while True: # Never stop!!!
         
-        DataGenerator()
+        GENERATEDATA()
         
         # # Import the current data pickle file.
         Data=pd.read_pickle(os.path.join(os.getcwd(),'cDATA.pkl'))
