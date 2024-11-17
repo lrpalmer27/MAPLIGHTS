@@ -29,8 +29,8 @@ LED_BRIGHTNESS = 255      # Set to 0 for darkest and 255 for brightest - THIS IS
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset):
-    while cUTCtime - timedelta(hours=1) > startingTime: #this opens a while loop for 1 hour.
+def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION):
+    while cUTCtime - timedelta(hours=LOOPDURATION) > startingTime: #this opens a while loop for 1 hour.
         # # Check current time.
         cUTCtime=datetime.now(timezone.utc)
         
@@ -47,15 +47,46 @@ def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocatio
             else:
                 #not daylight in that locaton. Use this to modify how much less bright it gets.
                 stationdayli=0.75
-                
+           
             #get the 0-1 range rgb value in pkl df. *255 to swith to 0-255 ish.    
             ConsiderateRGBA=(pd.Series(Data.RGBA[rowN])*255*stationdayli*localDaylight).tolist()
-        
-            strip.setPixelColor(1,Color(ConsiderateRGBA[0],ConsiderateRGBA[1],ConsiderateRGBA[2]))
+
+            strip.setPixelColor(rowN,Color(ConsiderateRGBA[0],ConsiderateRGBA[1],ConsiderateRGBA[2]))
             # strip.setPixelColor(Data.OrderedIndex[rowN],Color(ConsiderateRGBA[0],ConsiderateRGBA[1],ConsiderateRGBA[2])) #use when ordered index is actually correct.
             strip.show()
-            
-            time.sleep(60) #rest 60s before looping
+        
+        print('quickloop reloop')
+        time.sleep(60) #rest 60s before looping again
+    
+def theaterChase(strip, color, wait_ms=50, iterations=5):
+    """Movie theater light style chaser animation."""
+    """This is more like a sparkle action"""
+    for j in range(iterations):
+        for q in range(3):
+            for i in range(0, strip.numPixels(), 3):
+                strip.setPixelColor(i+q, color)
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+            for i in range(0, strip.numPixels(), 3):
+                strip.setPixelColor(i+q, 0)
+                
+def colorWipe(strip, color, wait_ms=50):
+    """Wipe color across display a pixel at a time."""
+    for i in range(strip.numPixels()):
+        strip.setPixelColor(i, color)
+        strip.show()
+        time.sleep(wait_ms/1000.0)
+        
+def InitializationAnimations(strip):
+    theaterChase(strip, Color(127, 127, 127)) #white sparkle
+    colorWipe(strip, Color(127,127,127)) #white lights
+    colorWipe(strip, Color(0,0,0)) #LIGHTS OUT!
+    colorWipe(strip, Color(0,0,127)) #blue lights
+    colorWipe(strip, Color(0,0,0)) #LIGHTS OUT!
+    colorWipe(strip, Color(0,127,0)) #green lights
+    colorWipe(strip, Color(0,0,0)) #LIGHTS OUT!
+    colorWipe(strip, Color(127,0,0)) #red lights
+    colorWipe(strip, Color(0,0,0)) #LIGHTS OUT!
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -69,12 +100,17 @@ if __name__ == '__main__':
     # Intialize the library (must be called once before other functions).
     strip.begin()
 
+    ## ------------------------------------------------- INITIAL ANIMATIONS HERE -----------------------------------------------------------
+    
+    print('initalization - color wipes')
+    InitializationAnimations(strip)
+         
     ## ------------------------------------------------- MAIN LOOP HERE -----------------------------------------------------------
-        
     while True: # Never stop!!!
-        
+        print('generate data')
         GENERATEDATA()
-        
+        print('data generated')
+               
         # # Import the current data pickle file.
         Data=pd.read_pickle(os.path.join(os.getcwd(),'cDATA.pkl'))
         
@@ -87,5 +123,13 @@ if __name__ == '__main__':
         BuildLocationSunrise=sun.get_local_sunrise_time(time_zone=timezone.utc)
         BuildLocationSunset=sun.get_local_sunset_time(time_zone=timezone.utc)
         
+        # Play some animations right before displaying the new colors.
+        theaterChase(strip, Color(127, 127, 127))
+        colorWipe(strip, Color(0,0,0))
+        
+        print('open quickloop')
         # open quickloop function, looping quicker, intention is to catch sunrise/sunset times.
-        QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset)
+        QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION=1)
+        
+        
+        

@@ -16,6 +16,8 @@ def GENERATEDATA(debugging=0):
     from meteostat import Stations, Hourly
     import os
     from suntime import Sun, SunTimeException
+    import matplotlib as mpl
+    from matplotlib import colormaps
 
     #preamble
     # debugging=0
@@ -26,7 +28,7 @@ def GENERATEDATA(debugging=0):
     cUTCtime=datetime.now(timezone.utc)
 
     ## ---------------------- GET LATLONG FROM CSV FILE --------------------------------
-    df = pd.read_csv(os.path.join(os.getcwd(),'NA_Cities.csv'))
+    df = pd.read_csv(os.path.join(os.getcwd(),'NA_cities.csv'))
 
     Nrows=df.shape[0]
 

@@ -1,7 +1,6 @@
 ## THIS IS MEANT TO BE RUN ON THE LOCAL MACHINE
 ## BASICS FOLLOW FROM: https://core-electronics.com.au/guides/fully-addressable-rgb-raspberry-pi/
 
-exit()
 # this file isnt intended to run on dev computer.
 
 """
