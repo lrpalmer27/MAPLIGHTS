@@ -48,8 +48,8 @@ def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocatio
                 #not daylight in that locaton. Use this to modify how much less bright it gets.
                 stationdayli=0.75
            
-            #get the 0-1 range rgb value in pkl df. *255 to swith to 0-255 ish.    
-            ConsiderateRGBA=(pd.Series(Data.RGBA[rowN])*255*stationdayli*localDaylight).tolist()
+            #get the 0-1 range rgb value in pkl df.    
+            ConsiderateRGBA=(pd.Series(Data.RGBA[rowN])*stationdayli*localDaylight).tolist()
 
             strip.setPixelColor(rowN,Color(ConsiderateRGBA[0],ConsiderateRGBA[1],ConsiderateRGBA[2]))
             # strip.setPixelColor(Data.OrderedIndex[rowN],Color(ConsiderateRGBA[0],ConsiderateRGBA[1],ConsiderateRGBA[2])) #use when ordered index is actually correct.

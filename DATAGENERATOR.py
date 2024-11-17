@@ -114,10 +114,15 @@ def GENERATEDATA(debugging=0):
             print(ICAO,LATS,LONGS,CTEMP,SNOW)
 
     ## -------------------------------------- COLORMAPPING HERE ------------------------------------------------
-    # cm=Colormap('jet') #'matlab:jet' # cmap has import numpy problem, and no apt install method for raspbian 
-    cm=mpl.colormaps['jet']
-    norm=mpl.colors.Normalize(min(CTEMP),max(CTEMP))
-    colors=cm(norm(CTEMP))
+    if mpl.__version__=='3.9.2':
+        cm=mpl.colormaps['jet'] #'matlab:jet' # for mpl 3.9.2
+        norm=mpl.colors.Normalize(min(CTEMP),max(CTEMP))
+        colors=cm(norm(CTEMP))
+        
+    if mpl.__version__=='3.3.4':
+        cm=mpl.colors.Colormap('jet') # for earlier versions of mpl (the one used on rpi)
+        norm=mpl.colors.Normalize(min(CTEMP),max(CTEMP))
+        colors=cm(norm)
 
     ## -------------------------------------- ADD DATA TO DF ---------------------------------------------------
         
@@ -131,7 +136,7 @@ def GENERATEDATA(debugging=0):
         
     keepers.to_pickle(r'./cDATA.pkl') #always export the pkl file.
 
-    if debugging: #this if statement gets deleted from rpi version
+    if debugging: #just for showing data on local machine
         import matplotlib.pyplot as plt
         import matplotlib as mpl
         ## -------------------------------------- VISUALIZE DATA LOCALLY ---------------------------------------------------

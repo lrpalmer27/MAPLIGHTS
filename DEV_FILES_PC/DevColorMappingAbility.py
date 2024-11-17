@@ -20,7 +20,8 @@ plt.colorbar()
 
 #mpl.colormaps not available on the useable version of mpl on rpi
 
-clrmapped=mpl.colors.Colormap['jet']
+# clrmapped=mpl.colormaps['jet'] # for mpl 3.9.2
+clrmapped=mpl.colors.Colormap['jet'] # for mpl 3.3.4
 norm=mpl.colors.Normalize(Data.Ctemp.min(),Data.Ctemp.max())
 colors=clrmapped(norm(Data.Ctemp))
 # print(colors)
