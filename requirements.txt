@@ -2,6 +2,3 @@ rpi_ws281x
 adafruit-circuitpython-neopixel
 meteostat
 suntime
-
-
-## sudo apt-get install python3-pandas

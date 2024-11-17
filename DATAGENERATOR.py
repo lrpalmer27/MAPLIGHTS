@@ -17,7 +17,6 @@ def GENERATEDATA(debugging=0):
     import os
     from suntime import Sun, SunTimeException
     import matplotlib as mpl
-    from cmap import Colormap
 
     #preamble
     # debugging=0
@@ -107,12 +106,6 @@ def GENERATEDATA(debugging=0):
             # deals with sunrise exception. Set SS to be hour 0 on Jan01 2024. This way current time can never be SR<=ctime<=SS.
             SS=datetime(2024,1,1,0,0,0,tzinfo=timezone.utc)
         
-        # # This functionality moved to rpi local.
-        # if SR<=cUTCtime>=SS:
-        #     dayli=1
-        # else:
-        #     dayli=0
-        
         SUNRISE.append(SR)
         SUNSET.append(SS)
         
@@ -121,7 +114,8 @@ def GENERATEDATA(debugging=0):
             print(ICAO,LATS,LONGS,CTEMP,SNOW)
 
     ## -------------------------------------- COLORMAPPING HERE ------------------------------------------------
-    cm=Colormap('jet') #'matlab:jet'
+    # cm=Colormap('jet') #'matlab:jet' # cmap has import numpy problem, and no apt install method for raspbian 
+    cm=mpl.colormaps['jet']
     norm=mpl.colors.Normalize(min(CTEMP),max(CTEMP))
     colors=cm(norm(CTEMP))
 

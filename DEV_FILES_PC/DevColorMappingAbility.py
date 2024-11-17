@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from meteostat import Stations, Hourly
 import os
-from cmap import Colormap
 
 Data=pd.read_pickle(os.path.join(os.getcwd(),'./cData.pkl'))
 
@@ -18,16 +17,13 @@ plt.colorbar()
 # plt.show()
 
 ## ---------------- DEV COLOR MAPPING HERE ---------------------
-"""
+
 #mpl.colormaps not available on the useable version of mpl on rpi
-clrmapped=mpl.colormaps['jet']
+
+clrmapped=mpl.colors.Colormap['jet']
 norm=mpl.colors.Normalize(Data.Ctemp.min(),Data.Ctemp.max())
 colors=clrmapped(norm(Data.Ctemp))
 # print(colors)
-"""
-cm=Colormap('viridis') #'matlab:jet'
-norm=mpl.colors.Normalize(Data.Ctemp.min(),Data.Ctemp.max())
-colors=cm(norm(Data.Ctemp))
 
 plt.figure('NA custom cmap scale')
 plt.scatter(Data.Longitude,Data.Latitude,c=colors)

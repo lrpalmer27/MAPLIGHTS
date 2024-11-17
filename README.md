@@ -13,6 +13,42 @@ Starting set of north american city coordinates courtesy of: https://www.infople
 
 Futher edits and functionality beyond these two sources are built by yours truly. 
 
+## Version Compatibility
+I am running this on a Raspberry Pi Zero running Python 3.9.2 with the following dependencies:
+
+    rpi_ws281x
+    adafruit-circuitpython-neopixel
+    meteostat
+    suntime
+
+It should be noted that in addition to these requirements, these items needed to be run
+
+    sudo python3 -m pip install --force-reinstall adafruit-blinka
+    sudo apt-get install python3-pandas
+
+ Plus raspi-config and enable GPIO pins
+
+For testing I am running these requirements on PC with Python 3.9.2: 
+
+    contourpy==1.3.0
+    cycler==0.12.1
+    fonttools==4.55.0
+    importlib_resources==6.4.5
+    kiwisolver==1.4.7
+    matplotlib==3.9.2
+    meteostat==1.6.8
+    numpy==2.0.2
+    packaging==24.2
+    pandas==2.2.3
+    pillow==11.0.0
+    pyparsing==3.2.0
+    python-dateutil==2.9.0.post0
+    pytz==2024.2
+    six==1.16.0
+    suntime==1.3.2
+    tzdata==2024.2
+    zipp==3.21.0
+
 ## Current State
 Ability to pull weather stations from a list of starting points (city coordinates) (which has been updated to reduce iterations to find them in future reps.) and plot them on a matplotlib scatter plot. The weather station coordinates are also exported to .csv. CSV coords can easily be imported to google earth pro and viewed to validate point density (as shown below).
 
