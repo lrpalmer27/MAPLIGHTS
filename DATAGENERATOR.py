@@ -17,7 +17,7 @@ def GENERATEDATA(debugging=0):
     import os
     from suntime import Sun, SunTimeException
     import matplotlib as mpl
-    from matplotlib import colormaps
+    from cmap import Colormap
 
     #preamble
     # debugging=0
@@ -120,10 +120,10 @@ def GENERATEDATA(debugging=0):
             print('current lists')
             print(ICAO,LATS,LONGS,CTEMP,SNOW)
 
-    ## -------------------------------------- COLORMAPPING HERE -------------------------------------------------
-    clrmapped=mpl.colormaps['jet']
+    ## -------------------------------------- COLORMAPPING HERE ------------------------------------------------
+    cm=Colormap('jet') #'matlab:jet'
     norm=mpl.colors.Normalize(min(CTEMP),max(CTEMP))
-    colors=clrmapped(norm(CTEMP))
+    colors=cm(norm(CTEMP))
 
     ## -------------------------------------- ADD DATA TO DF ---------------------------------------------------
         

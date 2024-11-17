@@ -5,14 +5,9 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from meteostat import Stations, Hourly
 import os
+from cmap import Colormap
 
-Data=pd.read_pickle(os.path.join(os.getcwd(),'Keepers_Export.pkl'))
-
-# print(Data.head())
-# print(Data.Ctemp)
-
-# print('Min temp in range',Data.Ctemp.min())
-# print('Max temp in range',Data.Ctemp.max())
+Data=pd.read_pickle(os.path.join(os.getcwd(),'./cData.pkl'))
 
 plt.figure('NA default scale')
 plt.scatter(Data.Longitude,Data.Latitude,c=Data.Ctemp,cmap='jet')
@@ -20,21 +15,27 @@ plt.title('North America Weather Stations - Temperature')
 plt.ylabel('Latitude')
 plt.xlabel('Longitude')
 plt.colorbar()
+# plt.show()
 
 ## ---------------- DEV COLOR MAPPING HERE ---------------------
+"""
+#mpl.colormaps not available on the useable version of mpl on rpi
 clrmapped=mpl.colormaps['jet']
-
 norm=mpl.colors.Normalize(Data.Ctemp.min(),Data.Ctemp.max())
-
 colors=clrmapped(norm(Data.Ctemp))
 # print(colors)
+"""
+cm=Colormap('viridis') #'matlab:jet'
+norm=mpl.colors.Normalize(Data.Ctemp.min(),Data.Ctemp.max())
+colors=cm(norm(Data.Ctemp))
 
 plt.figure('NA custom cmap scale')
 plt.scatter(Data.Longitude,Data.Latitude,c=colors)
-plt.title('North America Weather Stations - Temperature')
+plt.title('North America Weather Stations - Temperature, custom cmap')
 plt.ylabel('Latitude')
 plt.xlabel('Longitude')
 plt.colorbar()
+plt.show()
 
 ## ---------------- plotted straight from CSV -----------------------
 RGBA=Data.RGBA
