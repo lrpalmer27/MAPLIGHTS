@@ -14,12 +14,16 @@ LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 
 # Define functions which animate LEDs in various ways.
-def colorWipe(strip, color, wait_ms=50):
+def colorWipe(strip, color):
     """Wipe color across display a pixel at a time."""
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, color)
         strip.show()
-        time.sleep(wait_ms/1000.0)
+        
+# Define functions which animate LEDs in various ways.
+def SingleLEDset(strip, number, color):
+        strip.setPixelColor(number, color)
+        strip.show()
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -32,7 +36,11 @@ if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
     strip.begin()
-
-    colorWipe(strip,Color(126,0,0))
     
-    print('all red')
+    for i in range(0,127): ##65 ish
+        colorWipe(strip,Color(0,0,0)) # all off
+    
+        SingleLEDset(strip,i,Color(126,0,0)) #set current to red
+        print(i)
+        
+        input("")

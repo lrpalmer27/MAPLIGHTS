@@ -30,7 +30,7 @@ LED_INVERT     = False   # True to invert the signal (when using NPN transistor 
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION):
-    while cUTCtime - timedelta(hours=LOOPDURATION) > startingTime: #this opens a while loop for 1 hour.
+    while cUTCtime + timedelta(hours=LOOPDURATION) > startingTime: #this opens a while loop for 1 hour.
         # # Check current time.
         cUTCtime=datetime.now(timezone.utc)
         
@@ -48,10 +48,10 @@ def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocatio
                 #not daylight in that locaton. Use this to modify how much less bright it gets.
                 stationdayli=0.75
            
-            #get the 0-1 range rgb value in pkl df.    
-            ConsiderateRGBA=(pd.Series(Data.RGBA[rowN])*stationdayli*localDaylight).tolist()
+            #get the 0-1 range rgb value in pkl df and convert to a brightness considerate.    
+            ConsiderateRGBA=(pd.Series(Data.RGBA[rowN])*255*stationdayli*localDaylight).tolist()
 
-            strip.setPixelColor(rowN,Color(ConsiderateRGBA[0],ConsiderateRGBA[1],ConsiderateRGBA[2]))
+            strip.setPixelColor(rowN,Color(int(ConsiderateRGBA[0]),int(ConsiderateRGBA[1]),int(ConsiderateRGBA[2])))
             # strip.setPixelColor(Data.OrderedIndex[rowN],Color(ConsiderateRGBA[0],ConsiderateRGBA[1],ConsiderateRGBA[2])) #use when ordered index is actually correct.
             strip.show()
         
@@ -79,14 +79,14 @@ def colorWipe(strip, color, wait_ms=50):
         
 def InitializationAnimations(strip):
     theaterChase(strip, Color(127, 127, 127)) #white sparkle
-    colorWipe(strip, Color(127,127,127)) #white lights
-    colorWipe(strip, Color(0,0,0)) #LIGHTS OUT!
+    colorWipe(strip, Color(127,127,127)) #white light chase
+    colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
     colorWipe(strip, Color(0,0,127)) #blue lights
-    colorWipe(strip, Color(0,0,0)) #LIGHTS OUT!
+    colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
     colorWipe(strip, Color(0,127,0)) #green lights
-    colorWipe(strip, Color(0,0,0)) #LIGHTS OUT!
+    colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
     colorWipe(strip, Color(127,0,0)) #red lights
-    colorWipe(strip, Color(0,0,0)) #LIGHTS OUT!
+    colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -102,14 +102,14 @@ if __name__ == '__main__':
 
     ## ------------------------------------------------- INITIAL ANIMATIONS HERE -----------------------------------------------------------
     
-    print('initalization - color wipes')
+    print('Initalization - Color Wipes')
     InitializationAnimations(strip)
          
     ## ------------------------------------------------- MAIN LOOP HERE -----------------------------------------------------------
     while True: # Never stop!!!
-        print('generate data')
+        print('Query weather stations for new data!')
         GENERATEDATA()
-        print('data generated')
+        print('New data saved')
                
         # # Import the current data pickle file.
         Data=pd.read_pickle(os.path.join(os.getcwd(),'cDATA.pkl'))
@@ -125,9 +125,9 @@ if __name__ == '__main__':
         
         # Play some animations right before displaying the new colors.
         theaterChase(strip, Color(127, 127, 127))
-        colorWipe(strip, Color(0,0,0))
+        colorWipe(strip, Color(0,0,0),wait_ms=1) #lights out
         
-        print('open quickloop')
+        print('Open loop to show colors and brightnesses but not recheck temps')
         # open quickloop function, looping quicker, intention is to catch sunrise/sunset times.
         QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION=1)
         
