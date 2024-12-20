@@ -7,7 +7,12 @@
     5. 
 """
 
-def GENERATEDATA(debugging=0):
+def GENERATEDATA(debugging=0,times=[0,0]):
+    """
+    Debugging (optional) -  1: True - will go through some data vis steps to help understand the process
+                            0: False - will be faster.
+    Times (optional) -  [datetime.now(),datetime.now(timezone.utc)] - this can be used to generate data for a specific time in history. If no input, data will be generated for NOW.
+    """
 
     # Import Meteostat library and dependencies
     from datetime import datetime, timedelta, date, timezone
@@ -23,8 +28,16 @@ def GENERATEDATA(debugging=0):
     Hourly.cache_dir=r'.'
     WS=pd.DataFrame()
     stations = Stations()
-    ctime_local=datetime.now()
-    cUTCtime=datetime.now(timezone.utc)
+   
+    if times == [0,0]:
+        # this means no inputs are provided
+        ctime_local=datetime.now()
+        cUTCtime=datetime.now(timezone.utc)
+    else:
+        #this means the times variable is used to provide current times
+        ctime_local=times[0]
+        cUTCtime=times[1]
+    
 
     ## ---------------------- GET LATLONG FROM CSV FILE --------------------------------
     df = pd.read_csv(os.path.join(os.getcwd(),'NA_cities.csv'))

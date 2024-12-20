@@ -16,23 +16,23 @@ plt.xlabel('Longitude')
 plt.colorbar()
 # plt.show()
 
-## ---------------- DEV COLOR MAPPING HERE ---------------------
+# ## ---------------- DEV COLOR MAPPING HERE ---------------------
 
-#mpl.colormaps not available on the useable version of mpl on rpi
+# #mpl.colormaps not available on the useable version of mpl on rpi
 
-# clrmapped=mpl.colormaps['jet'] # for mpl 3.9.2
-clrmapped=mpl.colors.Colormap['jet'] # for mpl 3.3.4
-norm=mpl.colors.Normalize(Data.Ctemp.min(),Data.Ctemp.max())
-colors=clrmapped(norm(Data.Ctemp))
-# print(colors)
+# # clrmapped=mpl.colormaps['jet'] # for mpl 3.9.2
+# clrmapped=mpl.colors.Colormap['jet'] # for mpl 3.3.4
+# norm=mpl.colors.Normalize(Data.Ctemp.min(),Data.Ctemp.max())
+# colors=clrmapped(norm(Data.Ctemp))
+# # print(colors)
 
-plt.figure('NA custom cmap scale')
-plt.scatter(Data.Longitude,Data.Latitude,c=colors)
-plt.title('North America Weather Stations - Temperature, custom cmap')
-plt.ylabel('Latitude')
-plt.xlabel('Longitude')
-plt.colorbar()
-plt.show()
+# plt.figure('NA custom cmap scale')
+# plt.scatter(Data.Longitude,Data.Latitude,c=colors)
+# plt.title('North America Weather Stations - Temperature, custom cmap')
+# plt.ylabel('Latitude')
+# plt.xlabel('Longitude')
+# plt.colorbar()
+# plt.show()
 
 ## ---------------- plotted straight from CSV -----------------------
 RGBA=Data.RGBA

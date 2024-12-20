@@ -25,7 +25,7 @@ LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 10      # DMA channel to use for generating a signal (try 10)
-LED_BRIGHTNESS = 255      # Set to 0 for darkest and 255 for brightest - THIS IS MAPPED LATER. USE THIS AS A GLOBAL BRIGHTNESS MODIFIER.
+LED_BRIGHTNESS = 10      # Set to 0 for darkest and 255 for brightest - THIS IS MAPPED LATER. USE THIS AS A GLOBAL BRIGHTNESS MODIFIER.
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
@@ -119,7 +119,7 @@ if __name__ == '__main__':
         cUTCtime=datetime.now(timezone.utc)
 
         # # Get sunrise/sunset time in Dallas (approx build location)
-        sun=Sun(32.7767,-96.7970)
+        sun=Sun(32.7767,-96.7970) #dallas coords
         BuildLocationSunrise=sun.get_local_sunrise_time(time_zone=timezone.utc)
         BuildLocationSunset=sun.get_local_sunset_time(time_zone=timezone.utc)
         
