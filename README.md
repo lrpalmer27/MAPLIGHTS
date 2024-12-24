@@ -62,7 +62,7 @@ Plotting actual weather station coordinates on top of map that was actually prin
 Map as shown above has been printed, and assembled onto a POC frame, consisting of an MDF backboard, and two pine upper/lower boarders to squeeze the map poster in place. 
 Ø 1/4" holes are drilled, for the neopixels, all ~130 neopixels are hot glued onto the back of the MDF board. 3x 22AWG solid core wires are soldered onto the first neopixel, with 3x wires extending from each neopixel to the subsequent (6x leads on each neopixel).
 
-A 5V 45W laptop charger is used to power the system. According to neopixel best practices a small resistor is equipped to reduce noise in the data line, and a small capacitor is used to control power surges on the 5V line.
+A 5V 45W laptop charger is used to power the system. According to neopixel best practices a 400Ω resistor is equipped to reduce noise in the data line, and a 1000µF capacitor is used to control power surges in the 5V line. Power is injected at the start, mid-point, and end of the neopixel series. A quad-level shifter (Adafruit: 74AHCT125) is used to shift the 3.3V data signal output from RPI into a 5V signal, both at the start and midpoint of the neopixel sequence.
 
 The below picture shows the build's current state: 
 
@@ -72,7 +72,8 @@ A digital timelapse of the project is made, and will be used to later contrast a
 "GenDigitalMap.py" is used to generate the timelapse data across a date range, and resolution specified. 
 "MapDemoVidMaker.py" combined the timelapse images into a video.
 
-An example of the digital version at a midpoint, and the timelapse mp4:
+An example of the digital version at a midpoint, and the timelapse mp4. 
+**Timelapse mp4 cannot be pushed due to LFS data limit issue right now**
 
 <img src='Assets/TimelapseDataExample.png' width=400>
 
