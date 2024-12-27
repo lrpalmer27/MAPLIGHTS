@@ -72,14 +72,11 @@ A digital timelapse of the project is made, and will be used to later contrast a
 "GenDigitalMap.py" is used to generate the timelapse data across a date range, and resolution specified. 
 "MapDemoVidMaker.py" combined the timelapse images into a video.
 
-An example of the digital version at a midpoint, and the timelapse mp4. 
-**Timelapse mp4 cannot be pushed due to LFS data limit issue right now**
+Click the image below to view the digital timelapse on Youtube:
 
-<img src='Assets/TimelapseDataExample.png' width=400>
-
-<video width="400" controls>
-    <source src="AllDayTimelapse.mp4" type="video/mp4">
-</video>
+<a href="https://www.youtube.com/watch?v=dISfWsNURmg">
+    <img src='Assets/TimelapseDataExample.png' width=400>
+</a>
 
 ## Future Works
 Currently pending, is to re-order the "NA_Cities.csv" file to match the sequence that the neopixels are actually soldered together. I found it easier to decide the actual sequence during the soldering process rather than trying to follow a mapped sequence.
