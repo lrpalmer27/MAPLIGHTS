@@ -79,6 +79,7 @@ Click the image below to view the digital timelapse on Youtube. Note temperature
 </a>
 
 Contrasting this digital example, the physical build is shown on January 01 @ noon:
+
 <img src='Assets/PhysicalMapBuild_example02.jpg' width=400>
 
 To calibrate the system - getting the order of build LEDs digitized, the following map was generated. This map has an identical background to the build, and shows overlaid Longitude (blue), and latitude (red). 
@@ -95,3 +96,21 @@ This project is marked as complete for the time being. Some things I would like 
 - Make a cooler light show during the transition, just something that is fun.
     
 
+## Running on RPI, headless without killing program when disconnecting ssh session:
+Mainly notes for myself if I forget.
+
+Need to have screen installed
+
+    sudo apt-get install screen
+
+
+Running using detached screen. From: https://stackoverflow.com/questions/55462226/how-can-i-keep-a-python-script-on-a-remote-server-running-after-closing-out-of-s
+
+    screen                          #-- init screen
+    sudo python RPI_main.py
+    Ctrl+A then D                   #-- This detaches the screeen
+    ## you can now exit the screen / kill the ssh session as needed
+
+    ## --------- reconnecting: -----------
+    screen -ls                      #-- this will list currently running screen.
+    screen -r 13081                 #-- 13081 is an example of the 5 digit ID number you will need to reconnect to the screen.
