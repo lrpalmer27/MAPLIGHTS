@@ -78,6 +78,10 @@ Click the image below to view the digital timelapse on Youtube:
     <img src='Assets/TimelapseDataExample.png' width=400>
 </a>
 
+To calibrate the system - getting the order of build LEDs digitized, the following map was generated. This map has an identical background to the build, and shows overlaid Longitude (blue), and latitude (red). 
+
+<img src='Assets/DigitalMap_OverlaidWithCoords.png' width=400>
+
 ## Future Works
 Currently pending, is to re-order the "NA_Cities.csv" file to match the sequence that the neopixels are actually soldered together. I found it easier to decide the actual sequence during the soldering process rather than trying to follow a mapped sequence.
 

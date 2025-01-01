@@ -71,7 +71,7 @@ def GENERATEDATA(debugging=0,times=[0,0]):
         ## ---------------------- GET WEATHER STATION CLOSEST TO THESE POINTS (FROM CSV) -----------------
         loop=1
         stations = stations.nearby(df.loc[i,'LAT'],df.loc[i,'LONG'])
-        stations = stations.inventory('hourly',datetime(ctime_local.year,ctime_local.month,ctime_local.day-1,0)) #inventory by what stations had reported hourly data as of hour 0 today.
+        stations = stations.inventory('hourly',datetime.replace(ctime_local,hour=0,minute=0,second=0,microsecond=0)) #inventory by what stations had reported hourly data as of hour 0 today.
         station = stations.fetch(loop)
         
         while station.empty: 
@@ -163,7 +163,12 @@ def GENERATEDATA(debugging=0,times=[0,0]):
         plt.ylabel('LATITUDE')
         plt.xlabel('LONGITUDE')
         plt.title('North America Data Points - point density checker')
+        
+        #Add coordinate annotations on plot:
+        for L in range(0,keepers.shape[0]):
+            plt.annotate(f"({keepers['Longitude'][L]},{keepers['Latitude'][L]})",[keepers['Longitude'][L],keepers['Latitude'][L]],fontsize=2)
+        
         plt.show()
 
 if __name__ == '__main__':
-    GENERATEDATA(debugging=0)
+    GENERATEDATA(debugging=1)
