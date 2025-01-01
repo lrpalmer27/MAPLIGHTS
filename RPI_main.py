@@ -30,7 +30,10 @@ LED_INVERT     = False   # True to invert the signal (when using NPN transistor 
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION):
-    while cUTCtime + timedelta(hours=LOOPDURATION) > startingTime: #this opens a while loop for 1 hour.
+    """
+    LOOPDURATION: time in minutes before this function is killed and new data is re-generated.
+    """
+    while cUTCtime + timedelta(minutes=LOOPDURATION) > startingTime: #this opens a while loop for 1 hour.
         # # Check current time.
         cUTCtime=datetime.now(timezone.utc)
         
@@ -129,7 +132,7 @@ if __name__ == '__main__':
         
         print('Open loop to show colors and brightnesses but not recheck temps')
         # open quickloop function, looping quicker, intention is to catch sunrise/sunset times.
-        QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION=1)
+        QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION=20)
         
         
         
