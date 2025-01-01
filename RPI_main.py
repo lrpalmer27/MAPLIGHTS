@@ -25,7 +25,7 @@ LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 10      # DMA channel to use for generating a signal (try 10)
-LED_BRIGHTNESS = 10      # Set to 0 for darkest and 255 for brightest - THIS IS MAPPED LATER. USE THIS AS A GLOBAL BRIGHTNESS MODIFIER.
+LED_BRIGHTNESS = 127      # Set to 0 for darkest and 255 for brightest - THIS IS MAPPED LATER. USE THIS AS A GLOBAL BRIGHTNESS MODIFIER.
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
@@ -34,13 +34,13 @@ def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocatio
     LOOPDURATION: time in minutes before this function is killed and new data is re-generated.
     """
     while cUTCtime + timedelta(minutes=LOOPDURATION) > startingTime: #this opens a while loop for 1 hour.
-        # # Check current time.
+        # # Check current time
         cUTCtime=datetime.now(timezone.utc)
         
         if BuildLocationSunrise<=cUTCtime>=BuildLocationSunset:
             localDaylight=1
         else:
-            localDaylight=0.75 #Use this to modify how much less bright it gets.
+            localDaylight=0.50 #Use this to modify how much less bright it gets.
             
         # # Go though each row in pkl df and determine colour considerate of local and station sunset times. 
         for rowN in range(0,len(Data.Sunrise)):
@@ -49,7 +49,7 @@ def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocatio
                 stationdayli=1
             else:
                 #not daylight in that locaton. Use this to modify how much less bright it gets.
-                stationdayli=0.75
+                stationdayli=0.5
            
             #get the 0-1 range rgb value in pkl df and convert to a brightness considerate.    
             ConsiderateRGBA=(pd.Series(Data.RGBA[rowN])*255*stationdayli*localDaylight).tolist()
