@@ -74,9 +74,14 @@ def GENERATEDATA(debugging=0,times=[0,0]):
         stations = stations.inventory('hourly',datetime.replace(ctime_local,hour=0,minute=0,second=0,microsecond=0)) #inventory by what stations had reported hourly data as of hour 0 today.
         station = stations.fetch(loop)
         
+        if debugging:
+            print(f"loop number: {loop}")
+        
         while station.empty: 
             loop+=1
             station=stations.fetch(loop)
+            if debugging:
+                print(f'Station empty loop init, loop number: {loop}')
         
         if debugging:
             print(station)

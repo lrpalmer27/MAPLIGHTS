@@ -108,7 +108,7 @@ if __name__ == '__main__':
     ## ------------------------------------------------- MAIN LOOP HERE -----------------------------------------------------------
     while True: # Never stop!!!
         print('Query weather stations for new data!')
-        GENERATEDATA()
+        GENERATEDATA(debugging=1)
         print('New data saved')
                
         # # Import the current data pickle file.
