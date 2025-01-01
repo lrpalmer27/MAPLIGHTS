@@ -71,13 +71,22 @@ def GENERATEDATA(debugging=0,times=[0,0]):
         ## ---------------------- GET WEATHER STATION CLOSEST TO THESE POINTS (FROM CSV) -----------------
         loop=1
         stations = stations.nearby(df.loc[i,'LAT'],df.loc[i,'LONG'])
-        stations = stations.inventory('hourly',datetime.replace(ctime_local,hour=0,minute=0,second=0,microsecond=0)) #inventory by what stations had reported hourly data as of hour 0 today.
+        FilteringNewList=False
+        if FilteringNewList:
+            #this is good for filtering away bad stations (old ones that arent reporting anymore) from an arbitrary list of coordinates. 
+            # current coordinates in the cities are based on weather station coordinates, NOT city coords, so this isnt needed every time. Causes issues sometimes at start of months/years.
+            stations = stations.inventory('hourly',datetime.replace(ctime_local,hour=0,minute=0,second=0,microsecond=0)) #inventory by what stations had reported hourly data as of hour 0 today.
         station = stations.fetch(loop)
         
         if debugging:
+            print('station:',station)
             print(f"loop number: {loop}")
+            print("Looking for station at coordinates: (lat,long)",df.loc[i,'LAT'],df.loc[i,'LONG'])
+            print("at time:",datetime.replace(ctime_local,hour=0,minute=0,second=0,microsecond=0))
+            
         
         while station.empty: 
+            print("empty df:\n",station.head)
             loop+=1
             station=stations.fetch(loop)
             if debugging:

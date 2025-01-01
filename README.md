@@ -72,21 +72,26 @@ A digital timelapse of the project is made, and will be used to later contrast a
 "GenDigitalMap.py" is used to generate the timelapse data across a date range, and resolution specified. 
 "MapDemoVidMaker.py" combined the timelapse images into a video.
 
-Click the image below to view the digital timelapse on Youtube:
+Click the image below to view the digital timelapse on Youtube. Note temperatures only refresh every hour:
 
 <a href="https://www.youtube.com/watch?v=dISfWsNURmg">
     <img src='Assets/TimelapseDataExample.png' width=400>
 </a>
+
+Contrasting this digital example, the physical build is shown on January 01 @ noon:
+<img src='Assets/PhysicalMapBuild_example02.jpg' width=400>
 
 To calibrate the system - getting the order of build LEDs digitized, the following map was generated. This map has an identical background to the build, and shows overlaid Longitude (blue), and latitude (red). 
 
 <img src='Assets/DigitalMap_OverlaidWithCoords.png' width=400>
 
 ## Future Works
-Currently pending, is to re-order the "NA_Cities.csv" file to match the sequence that the neopixels are actually soldered together. I found it easier to decide the actual sequence during the soldering process rather than trying to follow a mapped sequence.
+This project is marked as complete for the time being. Some things I would like to add in the future when I come back around to this project:
 
-The "RPIDEV_FILES/debug_elec.py" file allows one light at a time to be turned on, and reports the index number. So, to re-order the NA_cities.csv file will simply be a matter of using the debug file and matching up the geographical location.
+- Make a proper timelapse of the actual build, and contrast it to the digital timelapse.
 
-A few dots shown in the digital examples are omitted for the acutal build because of physcial B-side space constraints. So the omitted dots will be removed during this calibration phase too.
+- Speed up the data refresh time, and/or run it in the background, so that I can increase the frequency of temperature refreshing. It takes a few minutes to gather temperature data on the RPIZero.
+
+- Make a cooler light show during the transition, just something that is fun.
     
 
