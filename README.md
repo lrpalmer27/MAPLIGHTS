@@ -96,6 +96,8 @@ and @ 6pm CST:
 <img src ='Assets/PhysicalMapBuild_example03.jpg' width=400>
 <img src ='Assets/PhysicalMapBuild_example04.jpg' width=400>
 
+& @ 630am CST: 
+<img src ='Assets/PhysicalMapBuild_example05.jpg' width=400>
 
 ## Future Works
 This project is marked as complete for the time being. Some things I would like to add in the future when I come back around to this project:
