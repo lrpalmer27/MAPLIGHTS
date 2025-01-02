@@ -64,6 +64,11 @@ Map as shown above has been printed, and assembled onto a POC frame, consisting 
 
 A 5V 45W laptop charger is used to power the system. According to neopixel best practices a 400Ω resistor is equipped to reduce noise in the data line, and a 1000µF capacitor is used to control power surges in the 5V line. Power is injected at the start, mid-point, and end of the neopixel series. A quad-level shifter (Adafruit: 74AHCT125) is used to shift the 3.3V data signal output from RPI into a 5V signal, both at the start and midpoint of the neopixel sequence.
 
+The below image shows a representative circuit using TinkerCAD. Note the Arduino shown in TinkerCAD is a placeholder for a RaspberryPi Zero.
+
+<img src='Assets/CARTOON_CIRCUIT.png' width=400>
+
+
 The below picture shows the build's current state: 
 
 <img src='Assets/PhysicalMapBuild_example01.jpg' width=400>
