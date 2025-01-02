@@ -78,13 +78,19 @@ Click the image below to view the digital timelapse on Youtube. Note temperature
     <img src='Assets/TimelapseDataExample.png' width=400>
 </a>
 
-Contrasting this digital example, the physical build is shown on January 01 @ noon:
-
-<img src='Assets/PhysicalMapBuild_example02.jpg' width=400>
-
 To calibrate the system - getting the order of build LEDs digitized, the following map was generated. This map has an identical background to the build, and shows overlaid Longitude (blue), and latitude (red). 
 
 <img src='Assets/DigitalMap_OverlaidWithCoords.png' width=400>
+
+The physical build is shown on January 01 @ noon CST:
+
+<img src='Assets/PhysicalMapBuild_example02.jpg' width=400>
+
+and @ 6pm CST: 
+
+<img src ='Assets/PhysicalMapBuild_example03.jpg' width=400>
+<img src ='Assets/PhysicalMapBuild_example04.jpg' width=400>
+
 
 ## Future Works
 This project is marked as complete for the time being. Some things I would like to add in the future when I come back around to this project:
@@ -93,7 +99,7 @@ This project is marked as complete for the time being. Some things I would like 
 
 - Speed up the data refresh time, and/or run it in the background, so that I can increase the frequency of temperature refreshing. It takes a few minutes to gather temperature data on the RPIZero.
 
-- Make a cooler light show during the transition, just something that is fun.
+- Make a cooler light show during the transition every time new data is pushed. Just because it is fun.
     
 
 ## Running on RPI, headless without killing program when disconnecting ssh session:

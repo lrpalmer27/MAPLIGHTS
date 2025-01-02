@@ -33,7 +33,7 @@ def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocatio
     """
     LOOPDURATION: time in minutes before this function is killed and new data is re-generated.
     """
-    while startingTime + timedelta(minutes=LOOPDURATION) < cUTCtime: #this opens a while loop for 1 hour.
+    while startingTime + timedelta(minutes=LOOPDURATION) > cUTCtime: #this opens a while loop for 1 hour.
         # # Check current time
         cUTCtime=datetime.now(timezone.utc)
         
