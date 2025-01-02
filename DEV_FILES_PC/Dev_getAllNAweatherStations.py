@@ -2,24 +2,19 @@
 from datetime import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
-from meteostat import Stations
+from meteostat import Stations, Hourly
+from datetime import timedelta
 
 # Get nearby weather stations
 stations = Stations()
-stations = stations.nearby(53.014783, -96.152344) #dead center canada to use as starting point
-station = stations.fetch(5000)
+stations = stations.nearby(35.4167, -97.3833) #dead center canada to use as starting point
+station = stations.fetch(1)
 
-## finds and drops non-north american weatherstations ----------------
-Canadian=station.index[station['country'] == 'CA'].tolist()
-American=station.index[station['country'] == 'US'].tolist()
-NorthAmerican=Canadian+American
+print(station)
 
-NA_Stations=station.loc[NorthAmerican]
+ctime_local=datetime.now()
+hourlyData=Hourly(station,ctime_local-timedelta(hours=1),ctime_local)
+Hrly=hourlyData.fetch()
 
-# NA_Stations.to_csv("NAStations.csv") #debugging
+print(Hrly)
 
-## Show things ---------------------------------------------------
-NA_Stations.plot.scatter('longitude','latitude',marker='x',color='r')
-plt.title('North America ONLY')
-
-plt.show()

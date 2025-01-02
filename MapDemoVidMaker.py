@@ -56,7 +56,7 @@ if __name__=="__main__":
     frame = cv2.imread(os.path.join(image_folder, images[0]))
     height, width, layers = frame.shape
     
-    saveMP4=False
+    saveMP4=True
     if saveMP4: #save as mp4
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         video = cv2.VideoWriter(video_name, fourcc=fourcc, fps=5, frameSize=(width,height))
@@ -67,7 +67,7 @@ if __name__=="__main__":
         cv2.destroyAllWindows()
         video.release()
     
-    saveGIF=True  
+    saveGIF=False  
     if saveGIF: #save as mp4
         gifName = '.AllDigitalMapShots/TimelapseGIF.gif' # saves file as gif
         imagesList=[]

@@ -97,6 +97,7 @@ and @ 6pm CST:
 <img src ='Assets/PhysicalMapBuild_example04.jpg' width=400>
 
 & @ 630am CST: 
+
 <img src ='Assets/PhysicalMapBuild_example05.jpg' width=400>
 
 ## Future Works
