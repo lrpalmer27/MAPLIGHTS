@@ -68,20 +68,9 @@ The below image shows a representative circuit using TinkerCAD. Note the Arduino
 
 <img src='Assets/CARTOON_CIRCUIT.png' width=400>
 
-
 The below picture shows the build's current state: 
 
 <img src='Assets/PhysicalMapBuild_example01.jpg' width=400>
-
-A digital timelapse of the project is made, and will be used to later contrast a timelapse of the physical project itself. 
-"GenDigitalMap.py" is used to generate the timelapse data across a date range, and resolution specified. 
-"MapDemoVidMaker.py" combined the timelapse images into a video.
-
-Click the image below to view the digital timelapse on Youtube. Note temperatures only refresh every hour:
-
-<a href="https://www.youtube.com/watch?v=dISfWsNURmg">
-    <img src='Assets/TimelapseDataExample.png' width=400>
-</a>
 
 To calibrate the system - getting the order of build LEDs digitized, the following map was generated. This map has an identical background to the build, and shows overlaid Longitude (blue), and latitude (red). 
 
@@ -100,10 +89,22 @@ and @ 6pm CST:
 
 <img src ='Assets/PhysicalMapBuild_example05.jpg' width=400>
 
+A digital timelapse of the project is made, in order to compare to a timelapse of the physical project itself. 
+"GenDigitalMap.py" is used to generate the timelapse data across a date range, and resolution specified. 
+"MapDemoVidMaker.py" combined the timelapse images into a video.
+
+## Timelapses
+Click the image below to view the digital timelapse on Youtube. Note temperatures only refresh every hour:
+
+<a href="https://www.youtube.com/watch?v=dISfWsNURmg">
+    <img src='Assets/TimelapseDataExample.png' width=400>
+</a>
+<a href="https://www.youtube.com/watch?v=cROjuIrwQ70">
+    <img src='Assets/2025-01-03_07-22-44.png' height=325>
+</a>
+
 ## Future Works
 Some small/medium things I would like to add in the future:
-
-- Make a proper timelapse of the actual build, and contrast it to the digital timelapse.
 
 - Add method to add a local webserver, or Amazon Alexa skill, to turn on/off the system at nighg/during working hours, so that it isn't running "All day". The reason for making this a server/Alexa skill is so that it isn't a hard-coded time to turn on/off, so it can be easily changed (from phone, or alexa command). ie. alexa turn on/off weathermap.
 
