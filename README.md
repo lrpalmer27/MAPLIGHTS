@@ -101,13 +101,15 @@ and @ 6pm CST:
 <img src ='Assets/PhysicalMapBuild_example05.jpg' width=400>
 
 ## Future Works
-This project is marked as complete for the time being. Some things I would like to add in the future when I come back around to this project:
+Some small/medium things I would like to add in the future:
 
 - Make a proper timelapse of the actual build, and contrast it to the digital timelapse.
 
-- Speed up the data refresh time, and/or run it in the background, so that I can increase the frequency of temperature refreshing. It takes a few minutes to gather temperature data on the RPIZero.
+- Add method to add a local webserver, or Amazon Alexa skill, to turn on/off the system at nighg/during working hours, so that it isn't running "All day". The reason for making this a server/Alexa skill is so that it isn't a hard-coded time to turn on/off, so it can be easily changed (from phone, or alexa command). ie. alexa turn on/off weathermap.
 
-- Make a cooler light show during the transition every time new data is pushed. Just because it is fun.
+- Look for a new datasource (potentially live?). Meteostat data is only updated every hour, and sometimes the data is from a model (hard to tell when).
+
+- Make a cooler light show during the transition every time new data is pushed. Just because.
     
 
 ## Running on RPI, headless without killing program when disconnecting ssh session:
