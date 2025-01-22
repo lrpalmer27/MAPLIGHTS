@@ -28,7 +28,7 @@ def GENERATEDATA(debugging=0,times=[0,0]):
     Hourly.cache_dir=r'.'
     WS=pd.DataFrame()
     stations = Stations()
-   
+    
     if times == [0,0]:
         # this means no inputs are provided
         ctime_local=datetime.now()

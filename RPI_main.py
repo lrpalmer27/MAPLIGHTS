@@ -91,6 +91,35 @@ def InitializationAnimations(strip):
     colorWipe(strip, Color(127,0,0)) #red lights
     colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
 
+def CheckShutdownTime(currentTime):
+    """
+    currentTime: current time as datetime object
+    This function checks the operating times for the map, and shuts down the system accordingly.
+    """
+    
+    #read shutdown times
+    df = pd.read(os.path.join(os.getcwd(),'OperatingTimes.csv'))
+    ontime_str=df.loc[0,'ON']
+    offtime_str=df.loc[0,'OFF']
+    
+    #convert ontime and offtime strings into datetime formats
+    ON_TIME=datetime.strptime(ontime_str,'%H:%M')
+    ON_TIME=ON_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day)
+
+    OFF_TIME=datetime.strptime(offtime_str,'%H:%M')
+    OFF_TIME=OFF_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day)
+    
+    #compare current time to shutdown times
+    if currentTime>ON_TIME and currentTime<OFF_TIME:
+        #this means the map should be operational
+        SleepTime=0
+    else: 
+        #if the above are not satisfied, then we need to sleep the machine until sunrise
+        ON_TIME_TMRW=ON_TIME.replace(day=((currentTime+timedelta(days=1)).day))
+        SleepTime = (ON_TIME-currentTime).seconds
+    
+    return SleepTime  
+    
 # Main program logic follows:
 if __name__ == '__main__':
     # ------------------------------------------------- INIT ITEMS -----------------------------------------------------------
@@ -138,7 +167,13 @@ if __name__ == '__main__':
         print('Open loop to show colors and brightnesses but not recheck temps')
         # open quickloop function, looping quicker, intention is to catch sunrise/sunset times.
         QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION=LoopDurVariable)
-        LoopDurVariable=20
+        LoopDurVariable=45
+        
+        #check to see if we need to shut down the system for the night
+        SleepTime=CheckShutdownTime(cUTCtime) 
+        if SleepTime != 0:
+            colorWipe(strip, Color(0,0,0),wait_ms=1) #lights out
+            time.sleep(SleepTime)
         
         print('Query weather stations for new data!')
         GENERATEDATA(debugging=False)
