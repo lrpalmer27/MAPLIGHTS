@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta, timezone
 import time
 import pandas as pd
 
@@ -29,8 +29,8 @@ print(datetime.now()+timedelta(days=1))
 
 print(((datetime.now()+timedelta(days=1)).day))
 
-ON_TIME_TMRW=ON_TIME.replace(day=((datetime.now()+timedelta(days=1)).day))
-SleepTime = ON_TIME-datetime.now()
+ON_TIME_TMRW=ON_TIME.replace(day=((datetime.now()+timedelta(days=1)).day),tzinfo=timezone.utc)
+SleepTime = ON_TIME_TMRW-datetime.now(timezone.utc)
 
 print(SleepTime.seconds)
 

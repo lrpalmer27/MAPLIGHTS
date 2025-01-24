@@ -98,25 +98,25 @@ def CheckShutdownTime(currentTime):
     """
     
     #read shutdown times
-    df = pd.read(os.path.join(os.getcwd(),'OperatingTimes.csv'))
+    df = pd.read_csv(os.path.join(os.getcwd(),'OperatingTimes.csv'))
     ontime_str=df.loc[0,'ON']
     offtime_str=df.loc[0,'OFF']
     
     #convert ontime and offtime strings into datetime formats
     ON_TIME=datetime.strptime(ontime_str,'%H:%M')
-    ON_TIME=ON_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day)
+    ON_TIME=ON_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=timezone.utc)
 
     OFF_TIME=datetime.strptime(offtime_str,'%H:%M')
-    OFF_TIME=OFF_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day)
+    OFF_TIME=OFF_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=timezone.utc)
     
     #compare current time to shutdown times
     if currentTime>ON_TIME and currentTime<OFF_TIME:
         #this means the map should be operational
         SleepTime=0
     else: 
-        #if the above are not satisfied, then we need to sleep the machine until sunrise
+        #if the above are not satisfied, then we need to sleep the machine until sunrise the upcoming morning
         ON_TIME_TMRW=ON_TIME.replace(day=((currentTime+timedelta(days=1)).day))
-        SleepTime = (ON_TIME-currentTime).seconds
+        SleepTime = (ON_TIME_TMRW-currentTime).seconds
     
     return SleepTime  
     
@@ -164,16 +164,17 @@ if __name__ == '__main__':
         theaterChase(strip, Color(127, 127, 127))
         colorWipe(strip, Color(0,0,0),wait_ms=1) #lights out
         
-        print('Open loop to show colors and brightnesses but not recheck temps')
-        # open quickloop function, looping quicker, intention is to catch sunrise/sunset times.
-        QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION=LoopDurVariable)
-        LoopDurVariable=45
-        
         #check to see if we need to shut down the system for the night
         SleepTime=CheckShutdownTime(cUTCtime) 
         if SleepTime != 0:
             colorWipe(strip, Color(0,0,0),wait_ms=1) #lights out
+            print(f"Sleeping for {SleepTime} seconds")
             time.sleep(SleepTime)
+        
+        print('Open loop to show colors and brightnesses but not recheck temps')
+        # open quickloop function, looping quicker, intention is to catch sunrise/sunset times.
+        QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION=LoopDurVariable)
+        LoopDurVariable=45
         
         print('Query weather stations for new data!')
         GENERATEDATA(debugging=False)
