@@ -16,6 +16,7 @@ def GENERATEDATA(debugging=0,times=[0,0]):
 
     # Import Meteostat library and dependencies
     from datetime import datetime, timedelta, date, timezone
+    from pytz import timezone as ptztz
     import pandas as pd
     import numpy as np
     from meteostat import Stations, Hourly
@@ -32,7 +33,7 @@ def GENERATEDATA(debugging=0,times=[0,0]):
     if times == [0,0]:
         # this means no inputs are provided
         ctime_local=datetime.now()
-        cUTCtime=datetime.now(timezone.utc)
+        cUTCtime=datetime.now(ptztz('America/Chicago'))
     else:
         #this means the times variable is used to provide current times
         ctime_local=times[0]
@@ -123,20 +124,20 @@ def GENERATEDATA(debugging=0,times=[0,0]):
         # try/except blocks for local sunrise/sunset times so we avoid the raised exceptions for (northern in this DS) places
         # which do not have sunrise/sunset every day all year 'round.
         try: 
-            SR=sun.get_local_sunrise_time(at_date=ctime_local,time_zone=timezone.utc)
+            SR=sun.get_local_sunrise_time(at_date=ctime_local,time_zone=ptztz('America/Chicago'))
         except:
             # deals with sunrise exception. Set SR to be hour 1 on Jan01 2024. This way current time can never be SR<=ctime<=SS.
-            SR=datetime(2024,1,1,1,1,1,tzinfo=timezone.utc)
+            SR=datetime(2024,1,1,1,1,1,tzinfo=ptztz('America/Chicago'))
         
         try:
-            SS=sun.get_local_sunset_time(at_date=ctime_local,time_zone=timezone.utc)
+            SS=sun.get_local_sunset_time(at_date=ctime_local,time_zone=ptztz('America/Chicago'))
             ## Dealing with known issue of returning sunset time in previous day --- https://github.com/SatAgro/suntime/issues/13
             ## sol'n from https://stackoverflow.com/questions/72087825/issue-with-python-sun-get-sunset-time-routine
             if SR>SS:
-                SS=sun.get_local_sunset_time(at_date=ctime_local+timedelta(days=1),time_zone=timezone.utc)
+                SS=sun.get_local_sunset_time(at_date=ctime_local+timedelta(days=1),time_zone=ptztz('America/Chicago'))
         except:
             # deals with sunrise exception. Set SS to be hour 0 on Jan01 2024. This way current time can never be SR<=ctime<=SS.
-            SS=datetime(2024,1,1,0,0,0,tzinfo=timezone.utc)
+            SS=datetime(2024,1,1,0,0,0,tzinfo=ptztz('America/Chicago'))
         
         SUNRISE.append(SR)
         SUNSET.append(SS)
