@@ -13,6 +13,7 @@ FUNCTIONALITY
 import time
 import os
 from datetime import datetime, timedelta, date, timezone
+from pytz import timezone as ptztz
 from rpi_ws281x import *
 import argparse
 import pandas as pd
@@ -35,7 +36,7 @@ def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocatio
     """
     while startingTime + timedelta(minutes=LOOPDURATION) > cUTCtime: #this opens a while loop for 1 hour.
         # # Check current time
-        cUTCtime=datetime.now(timezone.utc)
+        cUTCtime=datetime.now(ptztz('America/Chicago'))
         
         if BuildLocationSunrise<=cUTCtime>=BuildLocationSunset:
             localDaylight=1
@@ -104,10 +105,10 @@ def CheckShutdownTime(currentTime):
     
     #convert ontime and offtime strings into datetime formats
     ON_TIME=datetime.strptime(ontime_str,'%H:%M')
-    ON_TIME=ON_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=timezone.utc)
+    ON_TIME=ON_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=ptztz('America/Chicago'))
 
     OFF_TIME=datetime.strptime(offtime_str,'%H:%M')
-    OFF_TIME=OFF_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=timezone.utc)
+    OFF_TIME=OFF_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=ptztz('America/Chicago'))
     
     #compare current time to shutdown times
     if currentTime>ON_TIME and currentTime<OFF_TIME:
@@ -152,13 +153,13 @@ if __name__ == '__main__':
         Data=pd.read_pickle(os.path.join(os.getcwd(),'cDATA.pkl'))
         
         # initialize time variables
-        startingTime=datetime.now(timezone.utc)
-        cUTCtime=datetime.now(timezone.utc)
+        startingTime=datetime.now(ptztz('America/Chicago'))
+        cUTCtime=datetime.now(ptztz('America/Chicago'))
 
         # # Get sunrise/sunset time in Dallas (approx build location)
         sun=Sun(32.7767,-96.7970) #dallas coords
-        BuildLocationSunrise=sun.get_local_sunrise_time(time_zone=timezone.utc)
-        BuildLocationSunset=sun.get_local_sunset_time(time_zone=timezone.utc)
+        BuildLocationSunrise=sun.get_local_sunrise_time(time_zone=ptztz('America/Chicago'))
+        BuildLocationSunset=sun.get_local_sunset_time(time_zone=ptztz('America/Chicago'))
         
         # Play some animations right before displaying the new colors.
         theaterChase(strip, Color(127, 127, 127))
