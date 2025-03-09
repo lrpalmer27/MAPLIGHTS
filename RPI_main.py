@@ -29,6 +29,7 @@ LED_DMA        = 10      # DMA channel to use for generating a signal (try 10)
 LED_BRIGHTNESS = 80      # Set to 0 for darkest and 255 for brightest - THIS IS MAPPED LATER. USE THIS AS A GLOBAL BRIGHTNESS MODIFIER.
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
+LocalTimeZone = ptztz('America/Los_Angeles')
 
 def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION):
     """
@@ -36,7 +37,7 @@ def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocatio
     """
     while startingTime + timedelta(minutes=LOOPDURATION) > cUTCtime: #this opens a while loop for 1 hour.
         # # Check current time
-        cUTCtime=datetime.now(ptztz('America/Chicago'))
+        cUTCtime=datetime.now(LocalTimeZone)
         
         if BuildLocationSunrise<=cUTCtime>=BuildLocationSunset:
             localDaylight=1
@@ -105,10 +106,10 @@ def CheckShutdownTime(currentTime):
     
     #convert ontime and offtime strings into datetime formats
     ON_TIME=datetime.strptime(ontime_str,'%H:%M')
-    ON_TIME=ON_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=ptztz('America/Chicago'))
+    ON_TIME=ON_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=LocalTimeZone)
 
     OFF_TIME=datetime.strptime(offtime_str,'%H:%M')
-    OFF_TIME=OFF_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=ptztz('America/Chicago'))
+    OFF_TIME=OFF_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=LocalTimeZone)
     
     #compare current time to shutdown times
     if currentTime>ON_TIME and currentTime<OFF_TIME:
@@ -153,13 +154,13 @@ if __name__ == '__main__':
         Data=pd.read_pickle(os.path.join(os.getcwd(),'cDATA.pkl'))
         
         # initialize time variables
-        startingTime=datetime.now(ptztz('America/Chicago'))
-        cUTCtime=datetime.now(ptztz('America/Chicago'))
+        startingTime=datetime.now(LocalTimeZone)
+        cUTCtime=datetime.now(LocalTimeZone)
 
         # # Get sunrise/sunset time in Dallas (approx build location)
-        sun=Sun(32.7767,-96.7970) #dallas coords
-        BuildLocationSunrise=sun.get_local_sunrise_time(time_zone=ptztz('America/Chicago'))
-        BuildLocationSunset=sun.get_local_sunset_time(time_zone=ptztz('America/Chicago'))
+        sun=Sun(39.530895,-119.814972) #reno, nv coords
+        BuildLocationSunrise=sun.get_local_sunrise_time(time_zone=LocalTimeZone)
+        BuildLocationSunset=sun.get_local_sunset_time(time_zone=LocalTimeZone)
         
         # Play some animations right before displaying the new colors.
         theaterChase(strip, Color(127, 127, 127))
@@ -178,7 +179,7 @@ if __name__ == '__main__':
         LoopDurVariable=45
         
         print('Query weather stations for new data!')
-        GENERATEDATA(debugging=False)
+        GENERATEDATA(LocalTimeZone, debugging=False)
         print('New data saved')
         
         
