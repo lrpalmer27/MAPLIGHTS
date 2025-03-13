@@ -93,32 +93,55 @@ def InitializationAnimations(strip):
     colorWipe(strip, Color(127,0,0)) #red lights
     colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
 
+def ConvertStrTime2dt(stringDT,currentTime):
+    DT_format=datetime.strptime(stringDT,'%H:%M')
+    DT_format=DT_format.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=LocalTimeZone)
+
+    return DT_format
+
 def CheckShutdownTime(currentTime):
     """
     currentTime: current time as datetime object
     This function checks the operating times for the map, and shuts down the system accordingly.
     """
     
-    #read shutdown times
     df = pd.read_csv(os.path.join(os.getcwd(),'OperatingTimes.csv'))
-    ontime_str=df.loc[0,'ON']
-    offtime_str=df.loc[0,'OFF']
-    
-    #convert ontime and offtime strings into datetime formats
-    ON_TIME=datetime.strptime(ontime_str,'%H:%M')
-    ON_TIME=ON_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=LocalTimeZone)
 
-    OFF_TIME=datetime.strptime(offtime_str,'%H:%M')
-    OFF_TIME=OFF_TIME.replace(year=currentTime.year,month=currentTime.month,day=currentTime.day,tzinfo=LocalTimeZone)
-    
-    #compare current time to shutdown times
-    if currentTime>ON_TIME and currentTime<OFF_TIME:
-        #this means the map should be operational
-        SleepTime=0
-    else: 
-        #if the above are not satisfied, then we need to sleep the machine until sunrise the upcoming morning
-        ON_TIME_TMRW=ON_TIME.replace(day=((currentTime+timedelta(days=1)).day))
-        SleepTime = (ON_TIME_TMRW-currentTime).seconds
+    if currentTime.weekday() < 5: 
+        ontime_str=df.loc[0,'ON']
+        offtime_str=df.loc[0,'OFF']
+        ontime1_str=df.loc[1,'ON']
+        offtime1_str=df.loc[1,'OFF']
+        
+        if (currentTime > ConvertStrTime2dt(ontime_str,currentTime) and currentTime < ConvertStrTime2dt(offtime_str,currentTime)) or (currentTime > ConvertStrTime2dt(ontime1_str,currentTime) and currentTime < ConvertStrTime2dt(offtime1_str,currentTime)):
+            #  this means it should be ON
+            SleepTime = 0
+        
+        else:
+            # How much sleep do we need?
+            if currentTime > ConvertStrTime2dt(ontime1_str,currentTime):
+                # sleep all night!
+                ONTIME=ConvertStrTime2dt(ontime_str,currentTime)
+                ON_TIME_TMRW = ONTIME.replace(day=((currentTime+timedelta(days=1)).day))
+                SleepTime = (ON_TIME_TMRW-currentTime).seconds 
+            
+            elif currentTime > ConvertStrTime2dt(offtime_str,currentTime) and currentTime < ConvertStrTime2dt(ontime1_str,currentTime):
+                #  sleep until this afternoon!
+                ONTIME = ConvertStrTime2dt(ontime1_str,currentTime)
+                SleepTime=(ONTIME-currentTime).seconds
+
+    if currentTime.weekday() >= 5:
+        ontime_str=df.loc[0,'ON']
+        offtime_str=df.loc[0,'OFF']
+        
+        if currentTime > ConvertStrTime2dt(ontime_str,currentTime) and currentTime < ConvertStrTime2dt(offtime_str,currentTime):
+            # this means it should be ON!
+            SleepTime = 0 
+        
+        else: 
+            ONTIME=ConvertStrTime2dt(ontime_str,currentTime)
+            ON_TIME_TMRW = ONTIME.replace(day=((currentTime+timedelta(days=1)).day))
+            SleepTime = (ON_TIME_TMRW-currentTime).seconds
     
     return SleepTime  
     
