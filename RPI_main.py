@@ -131,8 +131,8 @@ def CheckShutdownTime(currentTime):
                 SleepTime=(ONTIME-currentTime).seconds
 
     if currentTime.weekday() >= 5:
-        ontime_str=df.loc[0,'ON']
-        offtime_str=df.loc[0,'OFF']
+        ontime_str=df.loc[1,'ON']
+        offtime_str=df.loc[1,'OFF']
         
         if currentTime > ConvertStrTime2dt(ontime_str,currentTime) and currentTime < ConvertStrTime2dt(offtime_str,currentTime):
             # this means it should be ON!
