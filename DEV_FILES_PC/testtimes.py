@@ -52,6 +52,7 @@ if currentTime.weekday() >= 5:
         # this means it should be ON!
         Sleep = 0 
     
+    
     else: 
         ONTIME=ConvertStrTime2dt(ontime_str,currentTime)
         ON_TIME_TMRW = ONTIME.replace(day=((currentTime+timedelta(days=1)).day))

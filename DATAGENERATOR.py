@@ -76,31 +76,30 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
         if FilteringNewList:
             #this is good for filtering away bad stations (old ones that arent reporting anymore) from an arbitrary list of coordinates. 
             # current coordinates in the cities are based on weather station coordinates, NOT city coords, so this isnt needed every time. Causes issues sometimes at start of months/years.
-            stations = stations.inventory('hourly',datetime.replace(ctime_local,hour=0,minute=0,second=0,microsecond=0)) #inventory by what stations had reported hourly data as of hour 0 today.
+            stations = stations.inventory('hourly',datetime.replace(ctime_local,hour=ctime_local.hour,minute=0,second=0,microsecond=0)) #inventory by what stations had reported hourly data as of hour 0 today.
         station = stations.fetch(loop)
         
         if debugging:
             print('station:',station)
             print(f"loop number: {loop}")
             print("Looking for station at coordinates: (lat,long)",df.loc[i,'LAT'],df.loc[i,'LONG'])
-            print("at time:",datetime.replace(ctime_local,hour=0,minute=0,second=0,microsecond=0))
+            print("at time:",datetime.replace(ctime_local,hour=ctime_local.hour,minute=0,second=0,microsecond=0))
             
-        
-        while station.empty: 
+        while Hourly(station,ctime_local-timedelta(hours=1),ctime_local).fetch().empty: 
             print("empty df:\n",station.head)
             loop+=1
             station=stations.fetch(loop)
             if debugging:
                 print(f'Station empty loop init, loop number: {loop}')
-        
-        if debugging:
-            print(station)
-            varr=station['hourly_end'].iloc[0].date()
             
         while station['hourly_end'].iloc[-1].date() < (AcceptableCutoffDate):
                 station=stations.fetch(loop)
                 varr=station['hourly_end'].iloc[-1].date()
                 loop+=1 
+        
+        if debugging: 
+            print(station)
+            print(station.iloc[-1])
 
         ## ---------------------- GET WEATHER STATION DATA IN DICT & ADD TO DF -----------------
         data = Hourly(station,ctime_local-timedelta(hours=1),ctime_local)
@@ -108,6 +107,7 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
         
         if debugging:
             print(data)
+            print(data['temp'])
 
         ICAO.append(station.icao[0])
         COUNTRY.append(station.country[0])
@@ -184,6 +184,8 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
             plt.annotate(f"({keepers['Longitude'][L]},{keepers['Latitude'][L]})",[keepers['Longitude'][L],keepers['Latitude'][L]],fontsize=2)
         
         plt.show()
+        
+        None
 
 if __name__ == '__main__':
     #if running locally

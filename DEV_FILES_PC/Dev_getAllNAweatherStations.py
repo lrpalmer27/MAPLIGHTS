@@ -7,10 +7,12 @@ from datetime import timedelta
 
 # Get nearby weather stations
 stations = Stations()
-stations = stations.nearby(35.4167, -97.3833) #dead center canada to use as starting point
-station = stations.fetch(1)
+stations = stations.nearby(43.5833, -96.75) #dead center canada to use as starting point
+station = stations.fetch(2)
 
 print(station)
+print(station['latitude'])
+print(station['longitude'])
 
 ctime_local=datetime.now()
 hourlyData=Hourly(station,ctime_local-timedelta(hours=1),ctime_local)
