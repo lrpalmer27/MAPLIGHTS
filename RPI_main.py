@@ -199,7 +199,7 @@ if __name__ == '__main__':
         print('Open loop to show colors and brightnesses but not recheck temps')
         # open quickloop function, looping quicker, intention is to catch sunrise/sunset times.
         QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION=LoopDurVariable)
-        LoopDurVariable=45
+        LoopDurVariable=240 #looping every 4hrs because its so slow to generate new data now!
         
         print('Query weather stations for new data!')
         GENERATEDATA(LocalTimeZone, debugging=False)

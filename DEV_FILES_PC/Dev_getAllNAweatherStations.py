@@ -4,19 +4,27 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from meteostat import Stations, Hourly
 from datetime import timedelta
+from pytz import timezone as ptztz
 
+
+Hourly.cache_dir=r'.'
 # Get nearby weather stations
 stations = Stations()
-stations = stations.nearby(43.5833, -96.75) #dead center canada to use as starting point
+# stations = stations.nearby(39.5349, -119.7527)
+stations = stations.nearby(27.9667, -82.5333)
+# stations = stations.inventory('hourly',datetime(2025,3,17))
 station = stations.fetch(2)
 
-print(station)
-print(station['latitude'])
-print(station['longitude'])
+print('Station \n',station)
+print('station icao',station.iloc[-1,4])
 
-ctime_local=datetime.now()
-hourlyData=Hourly(station,ctime_local-timedelta(hours=1),ctime_local)
+# station = '72488'
+
+# hourlyData=Hourly(station.iloc[0,3],datetime(2025,3,17,12),datetime(2025,3,17,20))
+hourlyData=Hourly('kheg',datetime(2025,3,17,12),datetime(2025,3,17,20))
 Hrly=hourlyData.fetch()
 
-print(Hrly)
+print('hrly.shape',Hrly.shape)
+print('Hourly data',Hrly)
+
 
