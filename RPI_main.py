@@ -178,19 +178,19 @@ if __name__ == '__main__':
         
         # initialize time variables
         startingTime=datetime.now(LocalTimeZone)
-        cUTCtime=datetime.now(LocalTimeZone)
+        cUTCtime=datetime.now(ptztz('UTC'))
 
         # # Get sunrise/sunset time in Dallas (approx build location)
         sun=Sun(39.530895,-119.814972) #reno, nv coords
-        BuildLocationSunrise=sun.get_local_sunrise_time(time_zone=LocalTimeZone)
-        BuildLocationSunset=sun.get_local_sunset_time(time_zone=LocalTimeZone)
+        BuildLocationSunrise=sun.get_local_sunrise_time(at_date=datetime.now(tz=LocalTimeZone)).replace(tzinfo=LocalTimeZone)
+        BuildLocationSunset=sun.get_local_sunset_time(at_date=datetime.now(tz=LocalTimeZone)).replace(tzinfo=LocalTimeZone)
         
         # Play some animations right before displaying the new colors.
         theaterChase(strip, Color(127, 127, 127))
         colorWipe(strip, Color(0,0,0),wait_ms=1) #lights out
         
         #check to see if we need to shut down the system for the night
-        SleepTime=CheckShutdownTime(cUTCtime) 
+        SleepTime=CheckShutdownTime(datetime.now(LocalTimeZone)) 
         if SleepTime != 0:
             colorWipe(strip, Color(0,0,0),wait_ms=1) #lights out
             print(f"Sleeping for {SleepTime} seconds")

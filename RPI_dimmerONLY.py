@@ -31,6 +31,7 @@ LED_INVERT     = False   # True to invert the signal (when using NPN transistor 
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 LocalTimeZone = ptztz('America/Los_Angeles')
 
+
 def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION):
     """
     LOOPDURATION: time in minutes before this function is killed and new data is re-generated.
@@ -170,24 +171,26 @@ if __name__ == '__main__':
         
         # initialize time variables
         startingTime=datetime.now(LocalTimeZone)
-        cUTCtime=datetime.now(LocalTimeZone)
+        cUTCtime=datetime.now(ptztz('UTC'))
 
         # # Get sunrise/sunset time in Dallas (approx build location)
         sun=Sun(39.530895,-119.814972) #reno, nv coords
-        BuildLocationSunrise=sun.get_local_sunrise_time(time_zone=LocalTimeZone)
-        BuildLocationSunset=sun.get_local_sunset_time(time_zone=LocalTimeZone)
+        BuildLocationSunrise=sun.get_local_sunrise_time(at_date=datetime.now(tz=LocalTimeZone)).replace(tzinfo=ptztz('UTC'))
+        BuildLocationSunset=sun.get_local_sunset_time(at_date=datetime.now(tz=LocalTimeZone)).replace(tzinfo=ptztz('UTC'))
+        
+        print("suntimes:\n",BuildLocationSunrise,BuildLocationSunset)
         
         # Play some animations right before displaying the new colors.
         theaterChase(strip, Color(127, 127, 127))
         colorWipe(strip, Color(0,0,0),wait_ms=1) #lights out
         
         #check to see if we need to shut down the system for the night
-        SleepTime=CheckShutdownTime(cUTCtime) 
+        SleepTime=CheckShutdownTime(datetime.now(LocalTimeZone)) 
         if SleepTime != 0:
             colorWipe(strip, Color(0,0,0),wait_ms=1) #lights out
             print(f"Sleeping for {SleepTime} seconds")
             time.sleep(SleepTime)
-        
+         
         print('Open loop to show colors and brightnesses but not recheck temps')
         # open quickloop function, looping quicker, intention is to catch sunrise/sunset times.
         LoopDurVariable=20 #looping every 4hrs because its so slow to generate new data now!
