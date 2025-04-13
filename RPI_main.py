@@ -61,7 +61,7 @@ def QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocatio
             strip.show()
         
         print('quickloop reloop')
-        time.sleep(60) #rest 60s before looping again
+        time.sleep(30) #rest 60s before looping again
     
 def theaterChase(strip, color, wait_ms=50, iterations=5):
     """Movie theater light style chaser animation."""
@@ -81,17 +81,58 @@ def colorWipe(strip, color, wait_ms=50):
         strip.setPixelColor(i, color)
         strip.show()
         time.sleep(wait_ms/1000.0)
+
+def EWColorWipe(strip,color,reverse=False,wait_ms=50):
+    # # Import the NA cities DF with ordered LEDs by lat long
+    NACitiesDF = pd.read_csv(os.path.join(os.getcwd(),'NA_cities_E2W.csv'))
+    
+    if not reverse:
+        for i in range(NACitiesDF.shape[0]):
+            print(NACitiesDF.loc[i,'ORDEREDINDEX'])
+            strip.setPixelColor(int(NACitiesDF.loc[i,'ORDEREDINDEX']), color)
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+    
+    elif reverse:
+        for i in range(NACitiesDF.shape[0]-1,0,-1):
+            print(NACitiesDF.loc[i,'ORDEREDINDEX'])
+            strip.setPixelColor(int(NACitiesDF.loc[i,'ORDEREDINDEX']), color)
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+            
+
+def NSColorWipe(strip,color,reverse=False,wait_ms=50):
+    # # Import the NA cities DF with ordered LEDs by lat long
+    NACitiesDF = pd.read_csv(os.path.join(os.getcwd(),'NA_cities_N2S.csv'))
+    
+    if not reverse:
+        for i in range(NACitiesDF.shape[0]):
+            print(NACitiesDF.loc[i,'ORDEREDINDEX'])
+            strip.setPixelColor(int(NACitiesDF.loc[i,'ORDEREDINDEX']), color)
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+    
+    elif reverse:
+        for i in range(NACitiesDF.shape[0]-1,0,-1):
+            print(NACitiesDF.loc[i,'ORDEREDINDEX'])
+            strip.setPixelColor(int(NACitiesDF.loc[i,'ORDEREDINDEX']), color)
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+
         
 def InitializationAnimations(strip):
     theaterChase(strip, Color(127, 127, 127)) #white sparkle
     colorWipe(strip, Color(127,127,127)) #white light chase
     colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
-    colorWipe(strip, Color(0,0,127)) #blue lights
-    colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
-    colorWipe(strip, Color(0,127,0)) #green lights
-    colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
-    colorWipe(strip, Color(127,0,0)) #red lights
-    colorWipe(strip, Color(0,0,0),wait_ms=1) #LIGHTS OUT!
+    NSColorWipe(strip, Color(127,0,0)) #Red from N2S
+    NSColorWipe(strip,Color(0,0,0)) #LIGHTS OUT!
+    NSColorWipe(strip, Color(127,0,0),reverse=True) #red up
+    NSColorWipe(strip, Color(0,127,0)) #green down
+    NSColorWipe(strip, Color(0,0,127),reverse=True) #blue up
+    EWColorWipe(strip, Color(127,0,0)) #red E2W
+    EWColorWipe(strip, Color(0,127,0),reverse=True) #blue W2E
+    EWColorWipe(strip, Color(0,0,127)) #green E2W
+    theaterChase(strip, Color(127, 127, 127)) #white sparkle
 
 def ConvertStrTime2dt(stringDT,currentTime):
     DT_format=datetime.strptime(stringDT,'%H:%M')
@@ -199,7 +240,7 @@ if __name__ == '__main__':
         print('Open loop to show colors and brightnesses but not recheck temps')
         # open quickloop function, looping quicker, intention is to catch sunrise/sunset times.
         QuickLoop(Data,strip,startingTime,cUTCtime,BuildLocationSunrise,BuildLocationSunset,LOOPDURATION=LoopDurVariable)
-        LoopDurVariable=240 #looping every 4hrs because its so slow to generate new data now!
+        LoopDurVariable=30 
         
         print('Query weather stations for new data!')
         GENERATEDATA(LocalTimeZone, debugging=False)
