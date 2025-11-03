@@ -21,7 +21,7 @@ print('station icao',station.iloc[-1,4])
 # station = '72488'
 
 # hourlyData=Hourly(station.iloc[0,3],datetime(2025,3,17,12),datetime(2025,3,17,20))
-hourlyData=Hourly('kheg',datetime(2025,3,17,12),datetime(2025,3,17,20))
+hourlyData=Hourly('72211',datetime(2025,6,15,7),datetime(2025,6,15,7))
 Hrly=hourlyData.fetch()
 
 print('hrly.shape',Hrly.shape)

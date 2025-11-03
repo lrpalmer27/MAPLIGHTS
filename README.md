@@ -13,6 +13,13 @@ Starting set of north american city coordinates courtesy of: https://www.infople
 
 Futher edits and functionality beyond these two sources are built by yours truly. 
 
+## startup
+add the below to: /etc/xdg/lxsession/LXDE-pi/autostart
+
+```
+@lxterminal -e /home/lprpizero/Desktop/LIGHTS/BootLights.sh &
+```
+
 ## Version Compatibility
 I am running this on a Raspberry Pi Zero running Bullseye and Python 3.9.2 with the following dependencies:
 

@@ -88,14 +88,12 @@ def EWColorWipe(strip,color,reverse=False,wait_ms=50):
     
     if not reverse:
         for i in range(NACitiesDF.shape[0]):
-            print(NACitiesDF.loc[i,'ORDEREDINDEX'])
             strip.setPixelColor(int(NACitiesDF.loc[i,'ORDEREDINDEX']), color)
             strip.show()
             time.sleep(wait_ms/1000.0)
     
     elif reverse:
         for i in range(NACitiesDF.shape[0]-1,0,-1):
-            print(NACitiesDF.loc[i,'ORDEREDINDEX'])
             strip.setPixelColor(int(NACitiesDF.loc[i,'ORDEREDINDEX']), color)
             strip.show()
             time.sleep(wait_ms/1000.0)
@@ -107,14 +105,12 @@ def NSColorWipe(strip,color,reverse=False,wait_ms=50):
     
     if not reverse:
         for i in range(NACitiesDF.shape[0]):
-            print(NACitiesDF.loc[i,'ORDEREDINDEX'])
             strip.setPixelColor(int(NACitiesDF.loc[i,'ORDEREDINDEX']), color)
             strip.show()
             time.sleep(wait_ms/1000.0)
     
     elif reverse:
         for i in range(NACitiesDF.shape[0]-1,0,-1):
-            print(NACitiesDF.loc[i,'ORDEREDINDEX'])
             strip.setPixelColor(int(NACitiesDF.loc[i,'ORDEREDINDEX']), color)
             strip.show()
             time.sleep(wait_ms/1000.0)
