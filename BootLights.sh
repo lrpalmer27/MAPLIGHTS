@@ -12,23 +12,22 @@ export DISPLAY=:0
 cd /home/lprpizero/Desktop/LIGHTS
 LOGFILE='/home/lprpizero/Desktop/LIGHTS/logs/logfile.txt'
 
-echo 'BootWallLights.sh opened' >> "$LOGFILE"
-
-# start venv
-# source /home/lprpizero/Desktop/LIGHTS/myvenv/bin/activate
-# echo 'opened venv' >> "$LOGFILE"
+sudo python resetLights.py 
+echo 'Bootup -> clear Lights' >> "$LOGFILE"
 
 # run python file
-sudo python3 /home/lprpizero/Desktop/LIGHTS/RPI_main.py
+sudo python3 /home/lprpizero/Desktop/LIGHTS/RPI_main.py 
 
 echo 'opened RPI_main.py' >> "$LOGFILE"
 
-cleanup () {
-	pkill -f RPI_main.py
-	sudo python3 resetLights.py
-	echo 'Cleaning up program and shutting down' >> "$LOGFILE"
-	sleep 20
+killNcleanup () {
+	echo "Stopping script. /n Cleaning up..."
+	sudo pkill -f RPI_main.py
+	sudo python resetLights.py 
+	sleep 3
+	echo 'cleaned up, shutting down' >> "$LOGFILE"
+
 }
 
-trap cleanup SIGINT
-trap cleanup SIGTSTP
+trap killNcleanup SIGINT
+trap killNcleanup SIGTSTP

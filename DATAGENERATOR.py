@@ -25,7 +25,6 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
     import matplotlib as mpl
 
     #preamble
-    # debugging=0
     Hourly.cache_dir=r'.'
     WS=pd.DataFrame()
     stations = Stations()
@@ -79,6 +78,7 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
             print(f"loop number: {loop}")
             print("Looking for station at coordinates: (lat,long)",df.loc[i,'LAT'],df.loc[i,'LONG'])
             print("at time:",datetime.replace(ctime_local,hour=ctime_local.hour,minute=0,second=0,microsecond=0))
+            print("next loop criteria: ",station['hourly_end'].iloc[-1].date())
             
         # while Hourly(station,ctime_local-timedelta(hours=1),ctime_local).fetch().empty: 
         #     print("empty df:\n",station.head)
@@ -93,16 +93,21 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
                 loop+=1 
 
         ## ---------------------- GET WEATHER STATION DATA IN DICT & ADD TO DF -----------------
-        data = Hourly(station,ctime_local-timedelta(hours=2),ctime_local)
-        data=data.fetch()
+        data = Hourly(station,ctime_local-timedelta(days=2),ctime_local)
+        data = data.fetch()
         
         while data.empty: 
+            if debugging: 
+                print("this station is returning an empty DF ", )
+                print("at coordinates: (lat,long)",df.loc[i,'LAT'],df.loc[i,'LONG'])
+                print("station val", station.iloc[-1,4])
+                #print(station)
+                #print(data)
+                
             loop +=1
             station=stations.fetch(loop)
-            data = Hourly(station.iloc[-1,4],ctime_local-timedelta(hours=3),ctime_local)
+            data = Hourly(station.iloc[-1,4],ctime_local-timedelta(days=2),ctime_local)
             data=data.fetch()
-            print(station)
-            print(data)
             
         if debugging:
             print(data)
