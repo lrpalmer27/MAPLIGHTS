@@ -93,7 +93,7 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
                 loop+=1 
 
         ## ---------------------- GET WEATHER STATION DATA IN DICT & ADD TO DF -----------------
-        data = Hourly(station,ctime_local-timedelta(days=2),ctime_local)
+        data = Hourly(station,ctime_local-timedelta(hours=6),ctime_local)
         data = data.fetch()
         
         while data.empty: 
@@ -106,7 +106,7 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
                 
             loop +=1
             station=stations.fetch(loop)
-            data = Hourly(station.iloc[-1,4],ctime_local-timedelta(days=2),ctime_local)
+            data = Hourly(station.iloc[-1,4],ctime_local-timedelta(hours=6),ctime_local)
             data=data.fetch()
             
         if debugging:
