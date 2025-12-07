@@ -77,7 +77,7 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
             print('station:',station)
             print(f"loop number: {loop}")
             print("Looking for station at coordinates: (lat,long)",df.loc[i,'LAT'],df.loc[i,'LONG'])
-            print("at time:",datetime.replace(ctime_local,hour=ctime_local.hour,minute=0,second=0,microsecond=0))
+            print("at time:",datetime.replace(ctime_local,hour=ctime_local.hour -1,minute=0,second=0,microsecond=0))
             print("next loop criteria: ",station['hourly_end'].iloc[-1].date())
             
         # while Hourly(station,ctime_local-timedelta(hours=1),ctime_local).fetch().empty: 
@@ -87,13 +87,13 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
         #     if debugging:
         #         print(f'Station empty loop init, loop number: {loop}')
             
-        while station['hourly_end'].iloc[-1].date() < (AcceptableCutoffDate):
+        while station['hourly_end'].iloc[-1].date() > (AcceptableCutoffDate):
                 station=stations.fetch(loop)
                 varr=station['hourly_end'].iloc[-1].date()
                 loop+=1 
 
         ## ---------------------- GET WEATHER STATION DATA IN DICT & ADD TO DF -----------------
-        data = Hourly(station,ctime_local-timedelta(hours=6),ctime_local)
+        data = Hourly(station,ctime_local-timedelta(hours=1),ctime_local)
         data = data.fetch()
         
         while data.empty: 
@@ -106,7 +106,7 @@ def GENERATEDATA(LocalTimeZone,debugging=0,times=[0,0]):
                 
             loop +=1
             station=stations.fetch(loop)
-            data = Hourly(station.iloc[-1,4],ctime_local-timedelta(hours=6),ctime_local)
+            data = Hourly(station.iloc[-1,4],ctime_local-timedelta(hours=1),ctime_local)
             data=data.fetch()
             
         if debugging:
