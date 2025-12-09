@@ -3,22 +3,23 @@
 sleep 5
 echo 'Starting map'
 
-# original:
-# screen -S main -d -m bash -c "sudo python3 ~/Desktop/LIGHTS/RPI_main.py"
-
 # make sure this runs on main display
 export DISPLAY=:0
 
 cd /home/lprpizero/Desktop/LIGHTS
 LOGFILE='/home/lprpizero/Desktop/LIGHTS/logs/logfile.txt'
 
+# open scheduled reboot tool - this is a brute force way to deal with weird meteostat data pulling problem
+lxterminal -e /home/logan/Desktop/WebCamViewer/rpiScheduledReboots.sh &
+echo "rpiScheduledReboots.sh opened @ $(date "+%r")" >> "$LOGFILE"
+
+# reset the lights
 sudo python resetLights.py 
-echo 'Bootup -> clear Lights' >> "$LOGFILE"
+echo 'Bootup -> clear Lights' | tee -a "$LOGFILE"
 
-# run python file
+# run the actual main file
 sudo python3 /home/lprpizero/Desktop/LIGHTS/RPI_main.py 
-
-echo 'opened RPI_main.py' >> "$LOGFILE"
+echo 'opened RPI_main.py' | tee -a "$LOGFILE"
 
 killNcleanup () {
 	echo "Stopping script. /n Cleaning up..."
