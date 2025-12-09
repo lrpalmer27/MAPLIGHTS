@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # setup same logfile 
-cd /home/logan/Desktop/WebCamViewer
-LOGFILE='/home/logan/Desktop/WebCamViewer/logs/logfile.txt'
+cd /home/lprpizero/Desktop/LIGHTS
+LOGFILE='/home/lprpizero/Desktop/LIGHTS/logs/logfile.txt'
 
 echo "rpiScheduledReboots.sh running @ $(date "+%r")" >> "$LOGFILE"
 

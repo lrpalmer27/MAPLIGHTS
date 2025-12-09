@@ -10,7 +10,7 @@ cd /home/lprpizero/Desktop/LIGHTS
 LOGFILE='/home/lprpizero/Desktop/LIGHTS/logs/logfile.txt'
 
 # open scheduled reboot tool - this is a brute force way to deal with weird meteostat data pulling problem
-lxterminal -e /home/logan/Desktop/LIGHTS/rpiScheduledReboots.sh &
+lxterminal -e /home/lprpizero/Desktop/LIGHTS/rpiScheduledReboots.sh &
 echo "rpiScheduledReboots.sh opened @ $(date "+%r")" | tee -a "$LOGFILE"
 
 # reset the lights
